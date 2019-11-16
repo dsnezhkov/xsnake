@@ -1,5 +1,25 @@
 
+// Ace
+var editor = ace.edit("editor");
+editor.setOptions({
+    theme: "ace/theme/textmate",
+});
+editor.session.setMode("ace/mode/python");
+editor.setKeyboardHandler("ace/keyboard/vim");
 
+
+document.getElementById ("fDag").addEventListener ("click", getFDag, false);
+document.getElementById ("fDag").addEventListener ("click", getFDag, false);
+document.getElementById ("rDag").addEventListener ("click", getRDag, false);
+document.getElementById ("wfedit").addEventListener ("click", getWfContent.bind(null,"WorkflowName"), false);
+
+
+$('#workflowSrch').click(function() {
+  getWfContent($("#workflowSrchIn").val());
+  getRDag();
+});
+
+// DAGs
 function cycleGraphE() {
     var gs = document.getElementById('graphs')
     gs.removeChild(gs.childNodes[0]);
@@ -7,6 +27,34 @@ function cycleGraphE() {
     var g = document.createElement('span');
     g.id = 'graph';
     gs.appendChild(g);
+}
+
+function getWfContent(wfName) {
+
+    // Make a request for a rule DAG
+    this.axios.get('/wfcontent?wf=' + wfName)
+        .then(function (response) {
+            console.log(response);
+            wfObj = JSON.parse(response.data);
+
+            console.log(wfObj);
+            if (wfObj.success  === false){
+                console.log("success false");
+                document.getElementById('rulemodaltitle').innerHTML = wfName;
+                document.getElementById('rulemodalbody').innerHTML =  wfObj.message;
+                $('#rulemodal').modal({keyboard: true});
+            }else{
+                editor.insert(wfObj.content);
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+
+            document.getElementById('rulemodaltitle').innerHTML = wfName;
+            document.getElementById('rulemodalbody').innerHTML =  error.message;
+            $('#rulemodal').modal({keyboard: true});
+        })
+        .finally(function () { });
 }
 
 function getRDag() {
@@ -17,7 +65,7 @@ function getRDag() {
             console.log(response);
             const digraph1 = response.data;
 
-            //cycleGraphE();
+            cycleGraphE();
             gRender(digraph1);
 
         })
@@ -47,12 +95,32 @@ function getFDag() {
 
 function getRule(ruleName) {
 
+    /* Find in WF editor
+    editor.find(ruleName,{
+        backwards: false,
+        wrap: false,
+        caseSensitive: false,
+        wholeWord: false,
+        regExp: false
+    });
+    */
+
     // Make a request for a rule DAG
     this.axios.get('/rule?name=' + ruleName)
         .then(function (response) {
             console.log(response);
-            document.getElementById('rulemodaltitle').innerHTML = ruleName;
-            document.getElementById('rulemodalbody').innerHTML = response.data;
+            ruleLocation = JSON.parse(response.data);
+            console.log(ruleLocation);
+
+            if (ruleLocation.success  === false){
+                console.log("success false");
+                document.getElementById('rulemodaltitle').innerHTML = ruleName;
+                document.getElementById('rulemodalbody').innerHTML =  ruleLocation.message;
+                $('#rulemodal').modal({keyboard: true});
+            }else{
+                editor.scrollToLine(ruleLocation);
+                editor.gotoLine(ruleLocation.content);
+            }
         })
         .catch(function (error) {
             console.log(error);
@@ -63,8 +131,8 @@ function getRule(ruleName) {
 function gRender(digraph) {
 
     const transition = d3.transition()
-        .delay(100)
-        .duration(1000);
+        .delay(0)
+        .duration(500);
 
         var graphviz = d3.select("#graph").graphviz();
             graphviz.on("end", function(){
@@ -75,9 +143,7 @@ function gRender(digraph) {
                     var title = d3.select(this).selectAll('title').text().trim();
                     var text = d3.select(this).selectAll('text').text();
 
-                    console.log("Fetching : ", text);
                     getRule(text);
-                    $('#rulemodal').modal({keyboard: true});
                  });
              });
              graphviz.transition(transition)

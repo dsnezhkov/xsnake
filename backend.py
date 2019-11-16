@@ -1,8 +1,11 @@
+import errno
+
 import cherrypy
 import snakemake
 import sys
 import os
 import re
+import json
 
 try:
     from StringIO import StringIO
@@ -41,29 +44,70 @@ class HelloWorld(object):
             return soutput
 
     @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def wfcontent(self, wf):
+
+        aResponse = {
+            "content": "",
+            "success": False,
+            "message": "Empty Worflow file name submitted"
+        }
+        if not wf:
+            return json.dumps(aResponse)
+
+        try:
+            with open(os.path.join('/Users/dimas/Code/xsnake/', wf)) as f:
+                aResponse["content"] = f.read()
+                aResponse["success"] = True
+                aResponse["message"] = ""
+        except IOError as x:
+            if x.errno == errno.ENOENT:
+                aResponse["message"] = "Workflow file does not exist"
+            elif x.errno == errno.EACCES:
+                aResponse["message"] = "Workflow file cannot be read"
+            else:
+                aResponse["message"] = "Unknown error when accessing Workflow file"
+
+        return json.dumps(aResponse)
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
     def rule(self, name):
 
         if not name:
             return "Invalid name"
 
-        position, message = "", ""
-        with Capturing() as soutput:
-            snakemake.snakemake("/Users/dimas/Code/xsnake/Workflow.0x0",
-                                dryrun=True, print_compilation=True, targets=[name],
-                                workdir="/Users/dimas/Code/xsnake/", nocolor=True, quiet=True)
-        output = str(soutput).replace("'", "").replace('"',"").replace(",","")
-        wrp = re.compile(r""".+?@workflow.rule\((name=""" + re.escape(name) + r""".+?)\).+?""")
-        wr = wrp.match(output)
-        if wr:
-            position = wr.group(1)
-            wrm = re.compile(r""".+?@workflow.rule\((name="""
-                             + re.escape(name)
-                             + r""".+?)\).+?@workflow.message\((.+?)\)""")
-            wm = wrm.match(output)
-            if wm:
-                message = wm.group(2)
+        aResponse = {
+            "content": "",
+            "success": False,
+            "message": ""
+        }
 
-        return "\n".join([position, message])
+        try:
+            # TODO: fix dynamic parameters
+            with open(os.path.join('/Users/dimas/Code/xsnake/', "Workflow.0x0")) as f:
+                wrp = re.compile(r"^rule\s+" + re.escape(name) + r'\s*:$')
+                for mark, line in enumerate(f.readlines()):
+                    print("matching[", line, "]")
+                    wr = wrp.match(line)
+                    if wr:
+                        aResponse["content"] = mark+1 # zero-based enumerator, editor is 1-based
+                        aResponse["success"] = True
+                        aResponse["message"] = ""
+                        break
+                    else:
+                        aResponse["message"] = "No matching rule found..."
+
+        except IOError as x:
+            if x.errno == errno.ENOENT:
+                aResponse["message"] = "Workflow file does not exist"
+            elif x.errno == errno.EACCES:
+                aResponse["message"] = "Workflow file cannot be read"
+            else:
+                aResponse["message"] = "Unknown error when accessing Workflow file"
+
+        return json.dumps(aResponse)
+
 
     @cherrypy.expose
     def index(self):
