@@ -14,8 +14,12 @@ document.getElementById ("rDag").addEventListener ("click", getRDag, false);
 document.getElementById ("wfedit").addEventListener ("click", getWfContent.bind(null,"WorkflowName"), false);
 
 
+
+// Search Workflow buttom
 $('#workflowSrch').click(function() {
-  getWfContent($("#workflowSrchIn").val());
+  const workflowName = $("#workflowSrchIn").val() ;
+  getWfContent(workflowName);
+  getWTree(workflowName);
   getRDag();
 });
 
@@ -27,6 +31,51 @@ function cycleGraphE() {
     var g = document.createElement('span');
     g.id = 'graph';
     gs.appendChild(g);
+}
+function getWTree(wfName) {
+
+    $('#wtree').jstree({
+        'core' : {
+            'animation' : 0,
+            'data' : {
+                "url" : "/wtree?wf=Workflow",
+                "dataType" : "json" // needed only if you do not supply JSON headers
+            }
+        }
+    }).on("changed.jstree", function (e, data) {
+        if ( data.selected[0].startsWith("XS") ){
+            console.log(data.selected);
+            getExposedContent(wfName,  data.selected[0] )
+        }
+    });
+}
+
+function getExposedContent(wfName, resourceId) {
+
+    // Make a request for a exposed identifier
+    this.axios.get('/econtent?wf=' + wfName + '&' + 'rid=' + resourceId)
+        .then(function (response) {
+            console.log(response);
+            wfObj = JSON.parse(response.data);
+
+            console.log(wfObj);
+            if (wfObj.success  === false){
+                console.log("success false");
+                document.getElementById('rulemodaltitle').innerHTML = wfName;
+                document.getElementById('rulemodalbody').innerHTML =  wfObj.message;
+                $('#rulemodal').modal({keyboard: true});
+            }else{
+                editor.insert(wfObj.content);
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+
+            document.getElementById('rulemodaltitle').innerHTML = wfName;
+            document.getElementById('rulemodalbody').innerHTML =  error.message;
+            $('#rulemodal').modal({keyboard: true});
+        })
+        .finally(function () { });
 }
 
 function getWfContent(wfName) {

@@ -1,4 +1,6 @@
 import errno
+import random
+import string
 
 import cherrypy
 import snakemake
@@ -6,6 +8,7 @@ import sys
 import os
 import re
 import json
+import jstree
 
 try:
     from StringIO import StringIO
@@ -26,7 +29,27 @@ class Capturing(list):
         sys.stdout = self._stdout
 
 
-class HelloWorld(object):
+def get_random_id(size=8, chars=string.ascii_uppercase + string.digits):
+    return "XS" + ''.join(random.choice(chars) for x in range(size))
+
+
+class XSnakeServer(object):
+
+    exposedViewPaths = {}
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def wtree(self, wf):
+
+        jstree_paths = ["includes/help/Workflow.0x0.man"]
+        for p in jstree_paths:
+            rid =  get_random_id()
+            XSnakeServer.exposedViewPaths[rid] = jstree.Path(p, rid)
+
+        t = jstree.JSTree(XSnakeServer.exposedViewPaths.values())
+        d = t.jsonData()
+        return d
+
     @cherrypy.expose
     def rules(self):
         with Capturing() as soutput:
@@ -42,6 +65,37 @@ class HelloWorld(object):
                                 targets=["glue_nmap2tbl"], dryrun=True,
                                 workdir="/Users/dimas/Code/xsnake/", nocolor=True, quiet=True)
             return soutput
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def econtent(self, wf, rid):
+
+        eResponse = {
+            "content": "",
+            "success": False,
+            "message": "Invalid parameters"
+        }
+        if not wf or not rid:
+            return json.dumps(eResponse)
+
+        if rid not in XSnakeServer.exposedViewPaths.keys():
+            return json.dumps(eResponse)
+
+        try:
+            with open(os.path.join('/Users/dimas/Code/xsnake/',
+                                   str(XSnakeServer.exposedViewPaths[rid].path))) as f:
+                eResponse["content"] = f.read()
+                eResponse["success"] = True
+                eResponse["message"] = ""
+        except IOError as x:
+            if x.errno == errno.ENOENT:
+                eResponse["message"] = "File does not exist" + str(XSnakeServer.exposedViewPaths[rid].path)
+            elif x.errno == errno.EACCES:
+                eResponse["message"] = "File cannot be read"
+            else:
+                eResponse["message"] = "Unknown error when accessing File"
+
+        return json.dumps(eResponse)
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
@@ -115,6 +169,7 @@ class HelloWorld(object):
 
 
 if __name__ == '__main__':
+
     conf = {
         '/': {
             'tools.sessions.on': True,
@@ -125,4 +180,4 @@ if __name__ == '__main__':
             'tools.staticdir.dir': './public/'
         }
     }
-    cherrypy.quickstart(HelloWorld(), '/', conf)
+    cherrypy.quickstart(XSnakeServer(), '/', conf)
