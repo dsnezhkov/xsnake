@@ -10,7 +10,7 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+          href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"/>
     <link rel="stylesheet" href="/static/css/custom.css">
 </head>
 
@@ -53,9 +53,9 @@
 </nav>
 
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-2">
+<div id="wnavigator" class="mx-auto px-5 collapse">
+    <div class="row"  >
+        <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Tree</h3>
@@ -77,7 +77,7 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">DAG</h3>
@@ -134,6 +134,8 @@
 <script src="/static/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
 
 <script src="/static/js/custom.js"></script>
 </body>

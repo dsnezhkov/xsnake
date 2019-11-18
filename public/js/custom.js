@@ -1,4 +1,3 @@
-
 // Ace
 var editor = ace.edit("editor");
 editor.setOptions({
@@ -8,44 +7,53 @@ editor.session.setMode("ace/mode/python");
 editor.setKeyboardHandler("ace/keyboard/vim");
 
 
-document.getElementById ("fDag").addEventListener ("click", getFDag, false);
-document.getElementById ("fDag").addEventListener ("click", getFDag, false);
-document.getElementById ("rDag").addEventListener ("click", getRDag, false);
-document.getElementById ("wfedit").addEventListener ("click", getWfContent.bind(null,"WorkflowName"), false);
-
-
+document.getElementById ("fDag").addEventListener ("click",
+    getFDag.bind(null,Cookies.get("workflow")), false);
+document.getElementById ("rDag").addEventListener ("click",
+    getRDag.bind(null,Cookies.get("workflow")), false);
+document.getElementById ("wfedit").addEventListener ("click",
+    getWfContent.bind(null,Cookies.get("workflow")), false);
 
 // Search Workflow buttom
-$('#workflowSrch').click(function() {
-  const workflowName = $("#workflowSrchIn").val() ;
-  getWfContent(workflowName);
-  getWTree(workflowName);
-  getRDag();
+$('#workflowSrch').click(function () {
+    const workflowName = $("#workflowSrchIn").val();
+    Cookies.set('workflow', workflowName, { path: '/' })
+    getWTree(workflowName);
+    getWfContent(workflowName);
+    getRDag(workflowName);
+    $('#wnavigator').show();
 });
+
+
+// Functions //
 
 // DAGs
 function cycleGraphE() {
-    var gs = document.getElementById('graphs')
+    const gs = document.getElementById('graphs')
     gs.removeChild(gs.childNodes[0]);
 
-    var g = document.createElement('span');
+    const g = document.createElement('span');
     g.id = 'graph';
     gs.appendChild(g);
 }
+
 function getWTree(wfName) {
 
-    $('#wtree').jstree({
-        'core' : {
-            'animation' : 0,
-            'data' : {
-                "url" : "/wtree?wf=Workflow",
-                "dataType" : "json" // needed only if you do not supply JSON headers
+    const wtree = $( "#wtree" );
+
+    wtree.jstree({
+        'core': {
+            'animation': 0,
+            'data': {
+                "url": "/wtree",
+                "dataType": "json" // needed only if you do not supply JSON headers
             }
         }
-    }).on("changed.jstree", function (e, data) {
-        if ( data.selected[0].startsWith("XS") ){
+    });
+    wtree.on("changed.jstree", function (e, data) {
+        if (data.selected[0].startsWith("XS")) {
             console.log(data.selected);
-            getExposedContent(wfName,  data.selected[0] )
+            getExposedContent(wfName, data.selected[0])
         }
     });
 }
@@ -59,114 +67,101 @@ function getExposedContent(wfName, resourceId) {
             wfObj = JSON.parse(response.data);
 
             console.log(wfObj);
-            if (wfObj.success  === false){
+            if (wfObj.success === false) {
                 console.log("success false");
                 document.getElementById('rulemodaltitle').innerHTML = wfName;
-                document.getElementById('rulemodalbody').innerHTML =  wfObj.message;
+                document.getElementById('rulemodalbody').innerHTML = wfObj.message;
                 $('#rulemodal').modal({keyboard: true});
-            }else{
-                editor.insert(wfObj.content);
+            } else {
+                editor.setValue(wfObj.content);
             }
         })
         .catch(function (error) {
             console.log(error);
 
             document.getElementById('rulemodaltitle').innerHTML = wfName;
-            document.getElementById('rulemodalbody').innerHTML =  error.message;
+            document.getElementById('rulemodalbody').innerHTML = error.message;
             $('#rulemodal').modal({keyboard: true});
         })
-        .finally(function () { });
+        .finally(function () {
+        });
 }
 
 function getWfContent(wfName) {
 
     // Make a request for a rule DAG
-    this.axios.get('/wfcontent?wf=' + wfName)
+    return this.axios.get('/wfcontent?wf=' + wfName)
         .then(function (response) {
             console.log(response);
             wfObj = JSON.parse(response.data);
 
             console.log(wfObj);
-            if (wfObj.success  === false){
-                console.log("success false");
+            if (wfObj.success === false) {
                 document.getElementById('rulemodaltitle').innerHTML = wfName;
-                document.getElementById('rulemodalbody').innerHTML =  wfObj.message;
+                document.getElementById('rulemodalbody').innerHTML = wfObj.message;
                 $('#rulemodal').modal({keyboard: true});
-            }else{
+            } else {
                 editor.insert(wfObj.content);
             }
         })
         .catch(function (error) {
             console.log(error);
-
             document.getElementById('rulemodaltitle').innerHTML = wfName;
-            document.getElementById('rulemodalbody').innerHTML =  error.message;
+            document.getElementById('rulemodalbody').innerHTML = error.message;
             $('#rulemodal').modal({keyboard: true});
         })
-        .finally(function () { });
 }
 
-function getRDag() {
+function getRDag(wf) {
 
     // Make a request for a rule DAG
-    axios.get('/rules')
+    axios.get('/rules?wf=' + wf)
         .then(function (response) {
             console.log(response);
             const digraph1 = response.data;
 
             cycleGraphE();
-            gRender(digraph1);
+            gRender(wf,digraph1);
 
         })
         .catch(function (error) {
             console.log(error);
         })
-        .finally(function () { });
+        .finally(function () {
+        });
 }
 
-function getFDag() {
+function getFDag(wf) {
 
     // Make a request for a file DAG
-    axios.get('/files')
+    axios.get('/files?wf=' + wf)
         .then(function (response) {
             console.log(response);
             var digraph1 = response.data;
 
             cycleGraphE();
-            gRender(digraph1);
+            gRender(wf, digraph1);
 
         })
         .catch(function (error) {
             console.log(error);
         })
-        .finally(function () { });
 }
 
-function getRule(ruleName) {
-
-    /* Find in WF editor
-    editor.find(ruleName,{
-        backwards: false,
-        wrap: false,
-        caseSensitive: false,
-        wholeWord: false,
-        regExp: false
-    });
-    */
+function getRule(wf, ruleName) {
 
     // Make a request for a rule DAG
-    this.axios.get('/rule?name=' + ruleName)
+    this.axios.get('/rule?' + 'wf=' + wf + '&' + 'name=' + ruleName)
         .then(function (response) {
             console.log(response);
             ruleLocation = JSON.parse(response.data);
             console.log(ruleLocation);
 
-            if (ruleLocation.success  === false){
-                console.log("success false");
+            if (ruleLocation.success === false) {
                 document.getElementById('rulemodaltitle').innerHTML = ruleName;
-                document.getElementById('rulemodalbody').innerHTML =  ruleLocation.message;
+                document.getElementById('rulemodalbody').innerHTML = ruleLocation.message;
                 $('#rulemodal').modal({keyboard: true});
-            }else{
+            } else {
                 editor.scrollToLine(ruleLocation);
                 editor.gotoLine(ruleLocation.content);
             }
@@ -174,29 +169,28 @@ function getRule(ruleName) {
         .catch(function (error) {
             console.log(error);
         })
-        .finally(function () { });
 }
 
-function gRender(digraph) {
+function gRender(wf,digraph) {
 
     const transition = d3.transition()
         .delay(0)
         .duration(500);
 
-        var graphviz = d3.select("#graph").graphviz();
-            graphviz.on("end", function(){
+    var graphviz = d3.select("#graph").graphviz();
+    graphviz.on("end", function () {
 
-                var dotSrcLines = digraph.split('\n');
-                nodes = d3.selectAll('.node,.edge');
-                nodes.on("click", function () {
-                    var title = d3.select(this).selectAll('title').text().trim();
-                    var text = d3.select(this).selectAll('text').text();
+        var dotSrcLines = digraph.split('\n');
+        nodes = d3.selectAll('.node,.edge');
+        nodes.on("click", function () {
+            var title = d3.select(this).selectAll('title').text().trim();
+            var ruleName = d3.select(this).selectAll('text').text();
 
-                    getRule(text);
-                 });
-             });
-             graphviz.transition(transition)
-                    .renderDot(digraph);
+            getRule(wf,ruleName);
+        });
+    });
+    graphviz.transition(transition)
+        .renderDot(digraph);
 }
 
 

@@ -10,6 +10,7 @@ import re
 import json
 import jstree
 
+
 try:
     from StringIO import StringIO
 except ImportError:
@@ -30,40 +31,51 @@ class Capturing(list):
 
 
 def get_random_id(size=8, chars=string.ascii_uppercase + string.digits):
+    # TODO: paramterize
     return "XS" + ''.join(random.choice(chars) for x in range(size))
 
 
 class XSnakeServer(object):
-
     exposedViewPaths = {}
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
-    def wtree(self, wf):
+    def wtree(self):
 
-        jstree_paths = ["includes/help/Workflow.0x0.man"]
-        for p in jstree_paths:
-            rid =  get_random_id()
-            XSnakeServer.exposedViewPaths[rid] = jstree.Path(p, rid)
+        # Add unique identifier to ta path for lookup, store in global dict
+        for path in cherrypy.request.app.config['XSnake.IncludePath']:
+            rid = get_random_id()
+            XSnakeServer.exposedViewPaths[rid] = jstree.Path(path, rid)
 
         t = jstree.JSTree(XSnakeServer.exposedViewPaths.values())
         d = t.jsonData()
         return d
 
     @cherrypy.expose
-    def rules(self):
+    def rules(self, wf):
         with Capturing() as soutput:
-            snakemake.snakemake("/Users/dimas/Code/xsnake/Workflow.0x0",
-                                printdag=True, targets=["glue_nmap2tbl"], dryrun=True,
-                                workdir="/Users/dimas/Code/xsnake/", nocolor=True, quiet=True)
+            snakemake.snakemake(
+                os.path.join(
+                    cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf,
+                    cherrypy.request.app.config['XSnake']['workflows.default_snakemake']
+                ),
+                printdag=True, targets=["glue_nmap2tbl"], dryrun=True,
+                workdir=os.path.join(cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf),
+                nocolor=True, quiet=True)
             return soutput
 
     @cherrypy.expose
-    def files(self):
+    def files(self, wf):
         with Capturing() as soutput:
-            snakemake.snakemake("/Users/dimas/Code/xsnake/Workflow.0x0", printfilegraph=True,
-                                targets=["glue_nmap2tbl"], dryrun=True,
-                                workdir="/Users/dimas/Code/xsnake/", nocolor=True, quiet=True)
+            snakemake.snakemake(
+                os.path.join(
+                    cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf,
+                    cherrypy.request.app.config['XSnake']['workflows.default_snakemake']
+                ),
+                printfilegraph=True,
+                targets=["glue_nmap2tbl"], dryrun=True,
+                workdir=os.path.join(cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf),
+                nocolor=True, quiet=True)
             return soutput
 
     @cherrypy.expose
@@ -82,8 +94,11 @@ class XSnakeServer(object):
             return json.dumps(eResponse)
 
         try:
-            with open(os.path.join('/Users/dimas/Code/xsnake/',
-                                   str(XSnakeServer.exposedViewPaths[rid].path))) as f:
+            with open(os.path.join(
+                    cherrypy.request.app.config['XSnake']['workflows.top_dir'],
+                    wf,
+                    str(XSnakeServer.exposedViewPaths[rid].path))) as f:
+                cherrypy.log(f.name)
                 eResponse["content"] = f.read()
                 eResponse["success"] = True
                 eResponse["message"] = ""
@@ -104,13 +119,17 @@ class XSnakeServer(object):
         aResponse = {
             "content": "",
             "success": False,
-            "message": "Empty Worflow file name submitted"
+            "message": ""
         }
         if not wf:
+            aResponse['message'] = "Empty Workflow file name submitted"
             return json.dumps(aResponse)
 
         try:
-            with open(os.path.join('/Users/dimas/Code/xsnake/', wf)) as f:
+            with open(os.path.join(
+                    cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf,
+                    cherrypy.request.app.config['XSnake']['workflows.default_snakemake']
+            )) as f:
                 aResponse["content"] = f.read()
                 aResponse["success"] = True
                 aResponse["message"] = ""
@@ -126,10 +145,7 @@ class XSnakeServer(object):
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
-    def rule(self, name):
-
-        if not name:
-            return "Invalid name"
+    def rule(self, wf, name):
 
         aResponse = {
             "content": "",
@@ -137,15 +153,21 @@ class XSnakeServer(object):
             "message": ""
         }
 
+        if not name or not wf:
+            aResponse['message'] = "Invalid workflow name or a rule name"
+            return json.dumps(aResponse)
+
         try:
             # TODO: fix dynamic parameters
-            with open(os.path.join('/Users/dimas/Code/xsnake/', "Workflow.0x0")) as f:
+            with open(os.path.join(
+                    cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf,
+                    cherrypy.request.app.config['XSnake']['workflows.default_snakemake']
+            )) as f:
                 wrp = re.compile(r"^rule\s+" + re.escape(name) + r'\s*:$')
                 for mark, line in enumerate(f.readlines()):
-                    print("matching[", line, "]")
                     wr = wrp.match(line)
                     if wr:
-                        aResponse["content"] = mark+1 # zero-based enumerator, editor is 1-based
+                        aResponse["content"] = mark + 1  # zero-based enumerator, editor is 1-based
                         aResponse["success"] = True
                         aResponse["message"] = ""
                         break
@@ -154,14 +176,13 @@ class XSnakeServer(object):
 
         except IOError as x:
             if x.errno == errno.ENOENT:
-                aResponse["message"] = "Workflow file does not exist"
+                aResponse["message"] = "File does not exist"
             elif x.errno == errno.EACCES:
-                aResponse["message"] = "Workflow file cannot be read"
+                aResponse["message"] = "File cannot be read"
             else:
-                aResponse["message"] = "Unknown error when accessing Workflow file"
+                aResponse["message"] = "Unknown error when accessing file"
 
         return json.dumps(aResponse)
-
 
     @cherrypy.expose
     def index(self):
@@ -169,15 +190,8 @@ class XSnakeServer(object):
 
 
 if __name__ == '__main__':
-
-    conf = {
-        '/': {
-            'tools.sessions.on': True,
-            'tools.staticdir.root': os.path.abspath(os.getcwd())
-        },
-        '/static': {
-            'tools.staticdir.on': True,
-            'tools.staticdir.dir': './public/'
-        }
-    }
-    cherrypy.quickstart(XSnakeServer(), '/', conf)
+    cherrypy.config.update((os.path.join(os.curdir, "server.conf")))
+    app = XSnakeServer()
+    cherrypy.tree.mount(app, '/', config=os.path.join(os.curdir, "app.conf"))
+    cherrypy.engine.start()
+    cherrypy.engine.block()
