@@ -1,4 +1,5 @@
 import errno
+import glob
 import json
 import os
 import random
@@ -11,8 +12,9 @@ import jstree
 import snakemake
 from io import StringIO
 
+import pathspec
 
-class Capturing(list):
+class CapStdIo(list):
 
     def __enter__(self):
         self._stdout = sys.stdout
@@ -45,29 +47,54 @@ class XSnakeServer(object):
 
         # Generate and store unique identifier to the path for lookup, store in global dict
         if not bool(XSnakeServer.exposedViewPaths):
-            for path in cherrypy.request.app.config['XSnake.IncludePath']:
-                rid = get_random_id()
-                XSnakeServer.exposedViewPaths[rid] = jstree.Path(path, rid)
-
-        workflows  = [wf for wf in cherrypy.request.app.config['XSnake.ExposedWorkflows']
-                      if cherrypy.request.app.config['XSnake.ExposedWorkflows'][wf] == 'allow']
+            workflows = [wf for wf in cherrypy.request.app.config['XSnake.ExposedWorkflows']
+                         if cherrypy.request.app.config['XSnake.ExposedWorkflows'][wf] == 'allow']
+            for wf in workflows:
+                XSnakeServer.exposedViewPaths[wf] = {}
 
         eResponse['success'] = True
-        eResponse['content'] = workflows
+        eResponse['content'] = list(XSnakeServer.exposedViewPaths.keys())
 
         return json.dumps(eResponse)
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
-    def wtree(self):
+    def wtree(self, wf):
 
-        t = jstree.JSTree(XSnakeServer.exposedViewPaths.values())
+        if not bool(XSnakeServer.exposedViewPaths[wf]):
+            XSnakeServer.exposedViewPaths[wf] = {}
+
+        print("== Workdir %s" % wf)
+        owd = os.getcwd()
+        print("== Workdir owd: %s" % owd)
+        os.chdir(os.path.join(cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf))
+        print("== Chdir'd Workdir owd: %s" % os.getcwd())
+        # TODO: check for specfile
+        spec_file = os.path.join(
+             cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf,
+             cherrypy.request.app.config['XSnake']['workflows.default_pathspec']
+        )
+        print("== Spec_file: %s" % spec_file)
+        with open(spec_file) as f:
+            spec = pathspec.PathSpec.from_lines('gitwildmatch', f)
+            for path in glob.iglob("*/**", recursive=True):
+                if spec.match_file(path):
+                    if os.path.isfile(path): # Only add files
+                        print("== Adding file (%s) : %s" % (wf, path))
+                        rid = get_random_id()
+                        XSnakeServer.exposedViewPaths[wf][rid] = jstree.Path(path, rid)
+        os.chdir(owd)
+
+        print("== Exposed paths in %s" % (wf))
+        [print(v) for v in XSnakeServer.exposedViewPaths[wf].values()]
+
+        t = jstree.JSTree(XSnakeServer.exposedViewPaths[wf].values())
         d = t.jsonData()
         return d
 
     @cherrypy.expose
     def rules(self, wf):
-        with Capturing() as soutput:
+        with CapStdIo() as soutput:
             snakemake.snakemake(
                 os.path.join(
                     cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf,
@@ -80,7 +107,7 @@ class XSnakeServer(object):
 
     @cherrypy.expose
     def files(self, wf):
-        with Capturing() as soutput:
+        with CapStdIo() as soutput:
             snakemake.snakemake(
                 os.path.join(
                     cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf,
@@ -105,7 +132,7 @@ class XSnakeServer(object):
             eResponse["message"] = "No Workflow or resource specified"
             return json.dumps(eResponse)
 
-        if rid not in XSnakeServer.exposedViewPaths.keys():
+        if rid not in XSnakeServer.exposedViewPaths[wf].keys():
             eResponse["message"] = "Resource id not in the allowed list"
             return json.dumps(eResponse)
 
@@ -113,14 +140,14 @@ class XSnakeServer(object):
             with open(os.path.join(
                     cherrypy.request.app.config['XSnake']['workflows.top_dir'],
                     wf,
-                    str(XSnakeServer.exposedViewPaths[rid].path))) as f:
+                    str( XSnakeServer.exposedViewPaths[wf][rid].path))) as f:
                 cherrypy.log(f.name)
                 eResponse["content"] = f.read()
                 eResponse["success"] = True
                 eResponse["message"] = ""
         except IOError as x:
             if x.errno == errno.ENOENT:
-                eResponse["message"] = "File does not exist" + str(XSnakeServer.exposedViewPaths[rid].path)
+                eResponse["message"] = "File does not exist" + str(XSnakeServer.exposedViewPaths[wf][rid].path)
             elif x.errno == errno.EACCES:
                 eResponse["message"] = "File cannot be read"
             else:

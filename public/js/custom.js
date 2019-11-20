@@ -49,7 +49,7 @@ function cycleGraphE() {
 }
 
 function getWTree(wfName) {
-
+    $('#wtree').unbind().removeData();
     $('#wtree').jstree({
         'core': {
             "themes": {
@@ -57,7 +57,7 @@ function getWTree(wfName) {
                 "responsive": true,
             },
             "data": {
-                "url": "/wtree",
+                "url": "/wtree?wf=" + wfName,
                 "dataType": "json"
             },
         },
@@ -86,7 +86,6 @@ function getWorkflows() {
 
             console.log(wfObj);
             if (wfObj.success === false) {
-                document.getElementById('rulemodaltitle').innerHTML = wfName;
                 document.getElementById('rulemodalbody').innerHTML = wfObj.message;
                 $('#rulemodal').modal({keyboard: true});
             } else {
@@ -97,7 +96,6 @@ function getWorkflows() {
         })
         .catch(function (error) {
             console.log(error);
-            document.getElementById('rulemodaltitle').innerHTML = wfName;
             document.getElementById('rulemodalbody').innerHTML = error.message;
             $('#rulemodal').modal({keyboard: true});
         })
