@@ -45,84 +45,58 @@
 
 
 <div id="wnavigator" class="mx-auto px-5 collapse">
+    <div class="row"><br/></div>
     <div class="row">
         <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Structure</h3>
-                    <nav class="navbar navbar-light bg-light">
-                    <ul class="nav">
+            <div class="card bg-light ">
+                <div class="card-header">
+                    <h5 class="card-title">Workflow Assets</h5>
+                    <ul class="nav nav-tabs card-header-tabs">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">Active</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item">
-                              <input id="wtreeSrch" autocomplete="off" aria-label="Search">
+                            <a class="nav-link active" href="#">Rule Files</a>
                         </li>
                     </ul>
-                    </nav>
-                    <div class="panel-body">
-                        <div id="wtree"></div>
-                    </div>
                 </div>
+                <div class="card-body">
+                    <input id="wtreeSrch" aria-label="search" autocomplete="off"/>
+                    <div id="wtree"></div>
+                </div>
+                <div class="card-footer"></div>
             </div>
         </div>
 
         <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Content</h3>
-                    <nav class="navbar navbar-light bg-light">
-                    <ul class="nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Active</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#">Disabled</a>
-                        </li>
-                    </ul>
-                    </nav>
-                    <div class="panel-body">
-                        <div id="editor"></div>
-                    </div>
+              <div class="card bg-light ">
+                <div class="card-header">
+                    <h5 class="card-title">Workflow Content</h5>
                 </div>
+                <div class="card-body">
+                    <div id="editor"></div>
+                </div>
+                <div class="card-footer"></div>
             </div>
         </div>
 
         <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Model</h3>
-                    <nav class="navbar navbar-light bg-light">
-                    <ul class="nav">
+             <div class="card ">
+                <div class="card-header">
+                    <h5 class="card-title">Workflow Model</h5>
+                    <ul class="nav nav-tabs card-header-tabs">
                         <li class="nav-item">
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    View As
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a id="fDag" class="dropdown-item" href="#">File</a>
-                                    <a id="rDag" class="dropdown-item" href="#">Rule</a>
-                                </div>
-                            </div>
+                            <a id="rDag" class="nav-link active" href="#">Rule</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="fDag" class="nav-link active" href="#">File</a>
                         </li>
                     </ul>
-                    </nav>
                 </div>
-                <div class="panel-body">
-
+                <div class="card-body">
                     <div id="graphs" style="text-align: center">
                         <div id="graph"></div>
                     </div>
                 </div>
+                 <div class="card-footer"></div>
             </div>
-
         </div>
     </div>
 </div>

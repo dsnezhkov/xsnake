@@ -53,7 +53,8 @@ function getWTree(wfName) {
     $('#wtree').jstree({
         'core': {
             "themes": {
-                'name': 'proton'
+                "name": "proton",
+                "responsive": true,
             },
             "data": {
                 "url": "/wtree",
