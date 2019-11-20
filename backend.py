@@ -1,20 +1,15 @@
 import errno
+import json
+import os
 import random
+import re
 import string
+import sys
 
 import cherrypy
-import snakemake
-import sys
-import os
-import re
-import json
 import jstree
-
-
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+import snakemake
+from io import StringIO
 
 
 class Capturing(list):
@@ -35,17 +30,36 @@ def get_random_id(size=8, chars=string.ascii_uppercase + string.digits):
     return "XS" + ''.join(random.choice(chars) for x in range(size))
 
 
+# TODO: Make sure to build this at the start and only return appropriate entries
 class XSnakeServer(object):
     exposedViewPaths = {}
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
-    def wtree(self):
+    def workflows(self):
+        eResponse = {
+            "content": "",
+            "success": False,
+            "message": ""
+        }
 
-        # Add unique identifier to ta path for lookup, store in global dict
-        for path in cherrypy.request.app.config['XSnake.IncludePath']:
-            rid = get_random_id()
-            XSnakeServer.exposedViewPaths[rid] = jstree.Path(path, rid)
+        # Generate and store unique identifier to the path for lookup, store in global dict
+        if not bool(XSnakeServer.exposedViewPaths):
+            for path in cherrypy.request.app.config['XSnake.IncludePath']:
+                rid = get_random_id()
+                XSnakeServer.exposedViewPaths[rid] = jstree.Path(path, rid)
+
+        workflows  = [wf for wf in cherrypy.request.app.config['XSnake.ExposedWorkflows']
+                      if cherrypy.request.app.config['XSnake.ExposedWorkflows'][wf] == 'allow']
+
+        eResponse['success'] = True
+        eResponse['content'] = workflows
+
+        return json.dumps(eResponse)
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def wtree(self):
 
         t = jstree.JSTree(XSnakeServer.exposedViewPaths.values())
         d = t.jsonData()
@@ -88,9 +102,11 @@ class XSnakeServer(object):
             "message": "Invalid parameters"
         }
         if not wf or not rid:
+            eResponse["message"] = "No Workflow or resource specified"
             return json.dumps(eResponse)
 
         if rid not in XSnakeServer.exposedViewPaths.keys():
+            eResponse["message"] = "Resource id not in the allowed list"
             return json.dumps(eResponse)
 
         try:

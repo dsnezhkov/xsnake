@@ -1,29 +1,40 @@
-// Ace
+// Ace Editor
 var editor = ace.edit("editor");
-editor.setOptions({
-    theme: "ace/theme/textmate",
+
+$(document).ready(function () {
+
+    // Ace
+    editor.setOptions({
+        theme: "ace/theme/textmate",
+    });
+    editor.session.setMode("ace/mode/python");
+    editor.setKeyboardHandler("ace/keyboard/vim");
+
+
+    // Workflows
+    $('#fDag').bind("click", function () {
+        getFDag(Cookies.get("workflow"));
+    });
+    $('#rDag').bind("click", function () {
+        getRDag(Cookies.get("workflow"));
+    });
+    $('#wfDropdown').on("click", "a", function () {
+        const workflowName = $(this).attr('id');
+        Cookies.set('workflow', workflowName, {path: '/'});
+        getWTree(workflowName);
+        getWfContent(workflowName);
+        getRDag(workflowName);
+        $('#wnavigator').show();
+    });
+    $('#wtreeSrch').keyup(function (e) {
+        const v = $('#wtreeSrch').val();
+        console.log(v);
+        $('#wtree').jstree("search", v)
+    });
+
+    // Fire Up
+    getWorkflows();
 });
-editor.session.setMode("ace/mode/python");
-editor.setKeyboardHandler("ace/keyboard/vim");
-
-
-document.getElementById ("fDag").addEventListener ("click",
-    getFDag.bind(null,Cookies.get("workflow")), false);
-document.getElementById ("rDag").addEventListener ("click",
-    getRDag.bind(null,Cookies.get("workflow")), false);
-document.getElementById ("wfedit").addEventListener ("click",
-    getWfContent.bind(null,Cookies.get("workflow")), false);
-
-// Search Workflow buttom
-$('#workflowSrch').click(function () {
-    const workflowName = $("#workflowSrchIn").val();
-    Cookies.set('workflow', workflowName, { path: '/' })
-    getWTree(workflowName);
-    getWfContent(workflowName);
-    getRDag(workflowName);
-    $('#wnavigator').show();
-});
-
 
 // Functions //
 
@@ -39,24 +50,58 @@ function cycleGraphE() {
 
 function getWTree(wfName) {
 
-    const wtree = $( "#wtree" );
-
-    wtree.jstree({
+    $('#wtree').jstree({
         'core': {
-            'animation': 0,
-            'data': {
+            "themes": {
+                'name': 'proton'
+            },
+            "data": {
                 "url": "/wtree",
-                "dataType": "json" // needed only if you do not supply JSON headers
-            }
+                "dataType": "json"
+            },
+        },
+        "plugins": ["search"],
+        "search": {
+            'case_sensitive': false,
+            'show_only_matches': true
         }
-    });
-    wtree.on("changed.jstree", function (e, data) {
+    }).on("changed.jstree", function (e, data) {
         if (data.selected[0].startsWith("XS")) {
             console.log(data.selected);
             getExposedContent(wfName, data.selected[0])
         }
+    }).on('ready.jstree', function () {
+        $(this).jstree('open_all')
     });
 }
+
+function getWorkflows() {
+
+    // Make a request for a rule DAG
+    return this.axios.get('/workflows')
+        .then(function (response) {
+            console.log(response);
+            wfObj = JSON.parse(response.data);
+
+            console.log(wfObj);
+            if (wfObj.success === false) {
+                document.getElementById('rulemodaltitle').innerHTML = wfName;
+                document.getElementById('rulemodalbody').innerHTML = wfObj.message;
+                $('#rulemodal').modal({keyboard: true});
+            } else {
+                wfObj.content.forEach(function (e) {
+                    $('#wfDropdown').append(`<a id="${e}" class="dropdown-item" href="#"> ${e} </a>`);
+                });
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+            document.getElementById('rulemodaltitle').innerHTML = wfName;
+            document.getElementById('rulemodalbody').innerHTML = error.message;
+            $('#rulemodal').modal({keyboard: true});
+        })
+}
+
 
 function getExposedContent(wfName, resourceId) {
 
@@ -74,6 +119,7 @@ function getExposedContent(wfName, resourceId) {
                 $('#rulemodal').modal({keyboard: true});
             } else {
                 editor.setValue(wfObj.content);
+                editor.session.selection.clearSelection();
             }
         })
         .catch(function (error) {
@@ -121,7 +167,7 @@ function getRDag(wf) {
             const digraph1 = response.data;
 
             cycleGraphE();
-            gRender(wf,digraph1);
+            gRender(wf, digraph1);
 
         })
         .catch(function (error) {
@@ -171,7 +217,7 @@ function getRule(wf, ruleName) {
         })
 }
 
-function gRender(wf,digraph) {
+function gRender(wf, digraph) {
 
     const transition = d3.transition()
         .delay(0)
@@ -186,7 +232,7 @@ function gRender(wf,digraph) {
             var title = d3.select(this).selectAll('title').text().trim();
             var ruleName = d3.select(this).selectAll('text').text();
 
-            getRule(wf,ruleName);
+            getRule(wf, ruleName);
         });
     });
     graphviz.transition(transition)

@@ -7,17 +7,19 @@
 
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"/>
+          href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css"/>
+    <link rel="stylesheet"
+          href="http://www.orangehilldev.com/jstree-bootstrap-theme/demo/assets/dist/themes/proton/style.css"/>
+
     <link rel="stylesheet" href="/static/css/custom.css">
 </head>
 
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">PSB Navigator</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -28,37 +30,39 @@
             <li class="nav-item active">
                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    Actions
+                    Workflows
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a id="fDag" class="dropdown-item" href="#">File</a>
-                    <a id="rDag" class="dropdown-item" href="#">Rule</a>
-                    <div class="dropdown-divider"></div>
-                    <a id="wfedit" class="dropdown-item" href="#">Full Workflow</a>
+                <div id="wfDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
                 </div>
             </li>
+
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input id="workflowSrchIn" class="form-control mr-sm-2" type="search" placeholder="Workflow"
-                   aria-label="Search">
-            <button id="workflowSrch" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
     </div>
 </nav>
 
 
 <div id="wnavigator" class="mx-auto px-5 collapse">
-    <div class="row"  >
+    <div class="row">
         <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Tree</h3>
+                    <h3 class="panel-title">Structure</h3>
+                    <nav class="navbar navbar-light bg-light">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Active</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                              <input id="wtreeSrch" autocomplete="off" aria-label="Search">
+                        </li>
+                    </ul>
+                    </nav>
                     <div class="panel-body">
                         <div id="wtree"></div>
                     </div>
@@ -69,7 +73,20 @@
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Editor</h3>
+                    <h3 class="panel-title">Content</h3>
+                    <nav class="navbar navbar-light bg-light">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Active</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Disabled</a>
+                        </li>
+                    </ul>
+                    </nav>
                     <div class="panel-body">
                         <div id="editor"></div>
                     </div>
@@ -80,9 +97,26 @@
         <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">DAG</h3>
+                    <h3 class="panel-title">Model</h3>
+                    <nav class="navbar navbar-light bg-light">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    View As
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a id="fDag" class="dropdown-item" href="#">File</a>
+                                    <a id="rDag" class="dropdown-item" href="#">Rule</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    </nav>
                 </div>
                 <div class="panel-body">
+
                     <div id="graphs" style="text-align: center">
                         <div id="graph"></div>
                     </div>
@@ -117,13 +151,10 @@
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script
         src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         crossorigin="anonymous"></script>
 
 <script src="//d3js.org/d3.v4.min.js"></script>
@@ -133,7 +164,7 @@
 
 <script src="/static/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
 
