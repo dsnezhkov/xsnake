@@ -10,6 +10,19 @@ $(document).ready(function () {
     editor.session.setMode("ace/mode/python");
     editor.setKeyboardHandler("ace/keyboard/vim");
 
+    // Set Lang Mode
+    $("#-mode").on("change", function(){
+        var selectedMode = $(':selected', this).val();
+        editor.session.setMode(selectedMode);
+    });
+
+    $("#keyboardHandler button").on("click", function () {
+        var thisBtn = $(this);
+        thisBtn.addClass('active').siblings().removeClass('active');
+        var btnText = thisBtn.text();
+        var btnValue = thisBtn.val();
+        editor.setKeyboardHandler(btnValue);
+    });
 
     // Workflows
     $('#fDag').bind("click", function () {
