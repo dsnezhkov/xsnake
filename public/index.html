@@ -20,7 +20,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">
-    <a class="navbar-brand" href="#"><img src="\https://1.cms.s81c.com/sites/default/files/2019-03-06/X-Force-Shield_padding.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        <img src="\https://1.cms.s81c.com/sites/default/files/2019-03-06/X-Force-Shield_padding.png" width="30" height="30" class="d-inline-block align-top" alt="">
             X-Force Red - PSB Navigator
     </a>
 
@@ -36,8 +36,7 @@
                    aria-haspopup="true" aria-expanded="false">
                     Workflows
                 </a>
-                <div id="wfDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                </div>
+                <div id="wfDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown"></div>
             </li>
 
         </ul>
@@ -45,10 +44,10 @@
 </nav>
 
 
-<div id="wnavigator" class="mx-auto px-5 collapse">
+<div id="wnavigator" class="content mx-auto px-5 collapse">
     <div class="row"><br/></div>
-    <div class="row">
-        <div class="col-md-3">
+    <div class="gutter-2 row">
+        <div id="one" class="col-sm-3">
             <div class="card bg-light ">
                 <div class="card-header">
                     <h5 class="card-title">Workflow Assets</h5>
@@ -60,26 +59,30 @@
                 </div>
                 <div class="card-body">
                     <input id="wtreeSrch" aria-label="search" autocomplete="off"/>
-                    <div id="wtree"></div>
+                    <div id="filetree" class="overflow-auto">
+                        <div id="wtree"></div>
+                    </div>
                 </div>
                 <div class="card-footer"></div>
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div id="two" class="col-sm-6">
               <div class="card bg-light ">
                 <div class="card-header">
                     <h5 class="card-title">Workflow Content</h5>
                 </div>
                 <div class="card-body">
-                    <div id="editor"></div>
+                    <div>
+                        <div id="editor" class="overflow-auto"></div>
+                    </div>
                 </div>
                 <div class="card-footer"></div>
             </div>
         </div>
 
-        <div class="col-md-3">
-             <div class="card ">
+        <div id="three" class="col-sm-3">
+             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Workflow Model</h5>
                     <ul class="nav nav-tabs card-header-tabs">
@@ -91,17 +94,20 @@
                         </li>
                     </ul>
                 </div>
-                <div class="tab-content card-body">
+                <div class="tab-content">
+                    <div class="card-body">
                     <div id="wrule" class="tab-pane active">
-                        <div id="graphs" style="text-align: center">
+                        <div id="graphs" style="text-align: center" class="overflow-auto">
                             <div id="graph"></div>
                         </div>
+                    </div>
                     </div>
                 </div>
                  <div class="card-footer"></div>
             </div>
         </div>
     </div>
+    <div class="row"><br/></div>
 </div>
 
 
@@ -133,6 +139,7 @@
         crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         crossorigin="anonymous"></script>
+
 
 <script src="//d3js.org/d3.v4.min.js"></script>
 <script src="https://unpkg.com/viz.js@1.8.1/viz.js" type="javascript/worker"></script>

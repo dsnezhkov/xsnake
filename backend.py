@@ -67,7 +67,8 @@ class XSnakeServer(object):
         print("== Workdir %s" % wf)
         owd = os.getcwd()
         print("== Workdir owd: %s" % owd)
-        os.chdir(os.path.join(cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf))
+        os.chdir(cherrypy.request.app.config['XSnake']['workflows.top_dir'])
+        #os.chdir(os.path.join(cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf))
         print("== Chdir'd Workdir owd: %s" % os.getcwd())
         # TODO: check for specfile
         spec_file = os.path.join(
@@ -77,7 +78,7 @@ class XSnakeServer(object):
         print("== Spec_file: %s" % spec_file)
         with open(spec_file) as f:
             spec = pathspec.PathSpec.from_lines('gitwildmatch', f)
-            for path in glob.iglob("*/**", recursive=True):
+            for path in glob.iglob(wf+"/**", recursive=True):
                 if spec.match_file(path):
                     if os.path.isfile(path): # Only add files
                         print("== Adding file (%s) : %s" % (wf, path))
@@ -139,8 +140,7 @@ class XSnakeServer(object):
         try:
             with open(os.path.join(
                     cherrypy.request.app.config['XSnake']['workflows.top_dir'],
-                    wf,
-                    str( XSnakeServer.exposedViewPaths[wf][rid].path))) as f:
+                    str(XSnakeServer.exposedViewPaths[wf][rid].path))) as f:
                 cherrypy.log(f.name)
                 eResponse["content"] = f.read()
                 eResponse["success"] = True
