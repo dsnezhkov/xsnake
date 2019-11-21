@@ -46,11 +46,37 @@ class XSnakeServer(object):
         }
 
         # Generate and store unique identifier to the path for lookup, store in global dict
+        # Build workflow tree at the start
         if not bool(XSnakeServer.exposedViewPaths):
             workflows = [wf for wf in cherrypy.request.app.config['XSnake.ExposedWorkflows']
                          if cherrypy.request.app.config['XSnake.ExposedWorkflows'][wf] == 'allow']
+
             for wf in workflows:
                 XSnakeServer.exposedViewPaths[wf] = {}
+                print("== Workdir %s" % wf)
+                owd = os.getcwd()
+                print("== Workdir owd: %s" % owd)
+                os.chdir(cherrypy.request.app.config['XSnake']['workflows.top_dir'])
+                # os.chdir(os.path.join(cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf))
+                print("== Chdir'd Workdir owd: %s" % os.getcwd())
+                # TODO: check for specfile
+                spec_file = os.path.join(
+                    cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf,
+                    cherrypy.request.app.config['XSnake']['workflows.default_pathspec']
+                )
+                print("== Spec_file: %s" % spec_file)
+                with open(spec_file) as f:
+                    spec = pathspec.PathSpec.from_lines('gitwildmatch', f)
+                    for path in glob.iglob(wf + "/**", recursive=True):
+                        if spec.match_file(path):
+                            if os.path.isfile(path):  # Only add files
+                                print("== Adding file (%s) : %s" % (wf, path))
+                                rid = get_random_id()
+                                XSnakeServer.exposedViewPaths[wf][rid] = jstree.Path(path, rid)
+                os.chdir(owd)
+
+                print("== Exposed paths in %s" % (wf))
+                [print(v) for v in XSnakeServer.exposedViewPaths[wf].values()]
 
         eResponse['success'] = True
         eResponse['content'] = list(XSnakeServer.exposedViewPaths.keys())
@@ -60,35 +86,6 @@ class XSnakeServer(object):
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def wtree(self, wf):
-
-        if not bool(XSnakeServer.exposedViewPaths[wf]):
-            XSnakeServer.exposedViewPaths[wf] = {}
-
-        print("== Workdir %s" % wf)
-        owd = os.getcwd()
-        print("== Workdir owd: %s" % owd)
-        os.chdir(cherrypy.request.app.config['XSnake']['workflows.top_dir'])
-        #os.chdir(os.path.join(cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf))
-        print("== Chdir'd Workdir owd: %s" % os.getcwd())
-        # TODO: check for specfile
-        spec_file = os.path.join(
-             cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf,
-             cherrypy.request.app.config['XSnake']['workflows.default_pathspec']
-        )
-        print("== Spec_file: %s" % spec_file)
-        with open(spec_file) as f:
-            spec = pathspec.PathSpec.from_lines('gitwildmatch', f)
-            for path in glob.iglob(wf+"/**", recursive=True):
-                if spec.match_file(path):
-                    if os.path.isfile(path): # Only add files
-                        print("== Adding file (%s) : %s" % (wf, path))
-                        rid = get_random_id()
-                        XSnakeServer.exposedViewPaths[wf][rid] = jstree.Path(path, rid)
-        os.chdir(owd)
-
-        print("== Exposed paths in %s" % (wf))
-        [print(v) for v in XSnakeServer.exposedViewPaths[wf].values()]
-
         t = jstree.JSTree(XSnakeServer.exposedViewPaths[wf].values())
         d = t.jsonData()
         return d
