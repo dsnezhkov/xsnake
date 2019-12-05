@@ -14,6 +14,7 @@ from io import StringIO
 
 import pathspec
 
+
 class CapStdIo(list):
 
     def __enter__(self):
@@ -98,7 +99,7 @@ class XSnakeServer(object):
                     cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf,
                     cherrypy.request.app.config['XSnake']['workflows.default_snakemake']
                 ),
-                printdag=True, targets=["glue_nmap2tbl"], dryrun=True,
+                printdag=True, targets=["all"], dryrun=True,
                 workdir=os.path.join(cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf),
                 nocolor=True, quiet=True)
             return soutput
@@ -112,7 +113,7 @@ class XSnakeServer(object):
                     cherrypy.request.app.config['XSnake']['workflows.default_snakemake']
                 ),
                 printfilegraph=True,
-                targets=["glue_nmap2tbl"], dryrun=True,
+                targets=["all"], dryrun=True,
                 workdir=os.path.join(cherrypy.request.app.config['XSnake']['workflows.top_dir'], wf),
                 nocolor=True, quiet=True)
             return soutput

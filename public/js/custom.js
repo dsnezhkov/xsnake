@@ -45,6 +45,147 @@ $(document).ready(function () {
         $('#wtree').jstree("search", v)
     });
 
+    $('#wtreeCollapse').on("click", function (e) {
+        $('#wtree').jstree("close_all");
+    });
+    $('#wtreeExpand').on("click", function (e) {
+        $('#wtree').jstree('open_all');
+    });
+
+    // Split.js
+    var splitobj = Split(["#one","#two", "#three"], {
+        elementStyle: function (dimension, size, gutterSize) {
+            $(window).trigger('resize'); // Optional
+            return {'flex-basis': 'calc(' + size + '% - ' + gutterSize + 'px)'}
+        },
+        gutterStyle: function (dimension, gutterSize) { return {'flex-basis':  gutterSize + 'px'} },
+        sizes: [20,50,20],
+        minSize: 10,
+        gutterSize: 6,
+        cursor: 'col-resize'
+    });
+
+    // Set-up the graph popout button
+    d3.select('#popOut').on('click', function(){
+        var width = 300, height = 300;
+        var svg = d3.select('#graph > svg')
+        var svgString = getSVGString(svg.node());
+        // svgString2Image( svgString, 2*width, 2*height, 'png' ); // passes Blob and filesize String to the callback
+        var opened = window.open(this.href, 'tw',  `toolbar=no,
+                                    location=no,
+                                    status=no,
+                                    menubar=no,
+                                    scrollbars=yes,
+                                    resizable=yes,
+                                    width=${width},
+                                    height=${height}`);
+        if (opened) {
+          opened.document.write(svgString);
+          opened.document.close();
+          opened.focus();
+        }
+    });
+
+    function getSVGString( svgNode ) {
+	//svgNode.setAttribute('xlink', 'http://www.w3.org/1999/xlink');
+	    var cssStyleText = getCSSStyles( svgNode );
+	    appendCSS( cssStyleText, svgNode );
+
+	    var serializer = new XMLSerializer();
+	    var svgString = serializer.serializeToString(svgNode);
+	    svgString = svgString.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink='); // Fix root xlink without namespace
+	    svgString = svgString.replace(/NS\d+:href/g, 'xlink:href'); // Safari NS namespace fix
+
+	    return svgString;
+
+	    function getCSSStyles( parentElement ) {
+            var selectorTextArr = [];
+
+            // Add Parent element Id and Classes to the list
+            selectorTextArr.push( '#'+parentElement.id );
+            for (var c = 0; c < parentElement.classList.length; c++)
+                    if ( !contains('.'+parentElement.classList[c], selectorTextArr) )
+                        selectorTextArr.push( '.'+parentElement.classList[c] );
+
+            // Add Children element Ids and Classes to the list
+            var nodes = parentElement.getElementsByTagName("*");
+            for (var i = 0; i < nodes.length; i++) {
+                var id = nodes[i].id;
+                if ( !contains('#'+id, selectorTextArr) )
+                    selectorTextArr.push( '#'+id );
+
+                var classes = nodes[i].classList;
+                for (var c = 0; c < classes.length; c++)
+                    if ( !contains('.'+classes[c], selectorTextArr) )
+                        selectorTextArr.push( '.'+classes[c] );
+            }
+
+            // Extract CSS Rules
+            var extractedCSSText = "";
+            for (var i = 0; i < document.styleSheets.length; i++) {
+                var s = document.styleSheets[i];
+
+                try {
+                    if(!s.cssRules) continue;
+                } catch( e ) {
+                        if(e.name !== 'SecurityError') throw e; // for Firefox
+                        continue;
+                    }
+
+                var cssRules = s.cssRules;
+                for (var r = 0; r < cssRules.length; r++) {
+                    if ( contains( cssRules[r].selectorText, selectorTextArr ) )
+                        extractedCSSText += cssRules[r].cssText;
+                }
+            }
+
+		    return extractedCSSText;
+
+		    function contains(str,arr) {
+			    return arr.indexOf( str ) === -1 ? false : true;
+		    }
+	}
+
+	function appendCSS( cssText, element ) {
+		var styleElement = document.createElement("style");
+		styleElement.setAttribute("type","text/css");
+		styleElement.innerHTML = cssText;
+		var refNode = element.hasChildNodes() ? element.children[0] : null;
+		element.insertBefore( styleElement, refNode );
+	}
+}
+
+
+/*
+function svgString2Image( svgString, width, height, format ) {
+	var format = format ? format : 'png';
+
+	var imgsrc = 'data:image/svg+xml;base64,'+ btoa( unescape( encodeURIComponent( svgString ) ) ); // Convert SVG string to data URL
+
+	var canvas = document.createElement("canvas");
+	var context = canvas.getContext("2d");
+
+	canvas.width = width;
+	canvas.height = height;
+
+	var image = new Image();
+    image.onload = function () {
+      context.drawImage(image, 0, 0, width, height);
+    }
+	image.src = imgsrc;
+
+    var url;
+    canvas.toBlob(function (blob) {
+         var newImg = document.createElement("img"),
+         url = URL.createObjectURL(blob);
+         newImg.onload = function () {
+            URL.revokeObjectURL(url);
+         };
+         newImg.src = url;
+      }, "image/png", 0.8);
+}
+*/
+
     // Fire Up
     getWorkflows();
 });
@@ -85,7 +226,7 @@ function getWTree(wfName) {
             getExposedContent(wfName, data.selected[0])
         }
     }).on('ready.jstree', function () {
-        $(this).jstree('open_all')
+        $(this).jstree() // open_all
     });
 }
 
@@ -159,6 +300,8 @@ function getWfContent(wfName) {
                 document.getElementById('rulemodalbody').innerHTML = wfObj.message;
                 $('#rulemodal').modal({keyboard: true});
             } else {
+                editor.selectAll()
+                editor.setValue("",0)
                 editor.insert(wfObj.content);
             }
         })
