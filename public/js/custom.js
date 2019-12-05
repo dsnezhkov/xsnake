@@ -156,36 +156,6 @@ $(document).ready(function () {
 }
 
 
-/*
-function svgString2Image( svgString, width, height, format ) {
-	var format = format ? format : 'png';
-
-	var imgsrc = 'data:image/svg+xml;base64,'+ btoa( unescape( encodeURIComponent( svgString ) ) ); // Convert SVG string to data URL
-
-	var canvas = document.createElement("canvas");
-	var context = canvas.getContext("2d");
-
-	canvas.width = width;
-	canvas.height = height;
-
-	var image = new Image();
-    image.onload = function () {
-      context.drawImage(image, 0, 0, width, height);
-    }
-	image.src = imgsrc;
-
-    var url;
-    canvas.toBlob(function (blob) {
-         var newImg = document.createElement("img"),
-         url = URL.createObjectURL(blob);
-         newImg.onload = function () {
-            URL.revokeObjectURL(url);
-         };
-         newImg.src = url;
-      }, "image/png", 0.8);
-}
-*/
-
     // Fire Up
     getWorkflows();
 });

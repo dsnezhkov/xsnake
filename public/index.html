@@ -18,11 +18,11 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-center">
     <a class="navbar-brand" href="#">
-        <img src="\https://1.cms.s81c.com/sites/default/files/2019-03-06/X-Force-Shield_padding.png" width="30"
+        <img src="https://1.cms.s81c.com/sites/default/files/2019-03-06/X-Force-Shield_padding.png" width="30"
              height="30" class="d-inline-block align-top" alt="">
-        X-Force Red - PSB Navigator
+             X-Snake Navigator
     </a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -45,111 +45,110 @@
 </nav>
 
 
-<div id="wnavigator" class="content mx-auto collapse">
-    <div class="row"><br/></div>
-    <div class="row no-gutters" style="height:600px">
-        <div id="one" class="col">
-            <div class="card bg-light ">
-                <div class="card-header">
-                    <h5 class="card-title">Workflow Assets</h5>
-                    <ul class="nav nav-tabs card-header-tabs">
-                        <li class="nav-item">
-                        </li>
-                        <li class="nav-item">
-                            <div class="input-group" style="margin-bottom: 5px;">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">&#127795;</span>
+<div class="content mx-auto">
+    <div id="wnavigator" class="collapse">
+        <div class="row"><br/></div>
+        <div class="row no-gutters" style="height:700px">
+            <div id="one" class="col">
+                <div class="card bg-light ">
+                    <div class="card-header">
+                        <h5 class="card-title text-center">Workflow Assets</h5>
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                            </li>
+                            <li class="nav-item">
+                                <div class="input-group" style="margin-bottom: 5px;">
+                                    <div class="input-group-prepend">
+                                        <a href="#" id='wtreeCollapse' class="input-group-text" title="Collapse Tree">&#x21E3;</a>
+                                    </div>
+                                    <div class="input-group-prepend">
+                                        <a href="#" id='wtreeExpand' class="input-group-text" title="Expand Tree">&#8691;</a>
+                                    </div>
+                                    <input id="wtreeSrch" autocomplete="off"
+                                           type="text" class="form-control"
+                                           placeholder="Lookup" aria-label="search"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">&#x1F50D;</span>
+                                    </div>
                                 </div>
-                                <input id="wtreeSrch" autocomplete="off"
-                                       type="text" class="form-control"
-                                       placeholder="Lookup" aria-label="search"/>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">&#x1F50D;</span>
-                                </div>
-                                <div class="input-group-append">
-                                    <a href="#" id='wtreeCollapse' class="input-group-text" title="Collapse Tree" >&#x21E3;</a>
-                                </div>
-                                <div class="input-group-append">
-                                    <a href="#" id='wtreeExpand' class="input-group-text" title="Expand Tree">&#8691;</a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div id="filetree" class="overflow-auto">
-                        <div id="wtree"></div>
+                            </li>
+                        </ul>
                     </div>
-                </div>
-                <div class="card-footer"></div>
-            </div>
-        </div>
-
-        <div id="two" class="col">
-            <div class="card bg-light ">
-                <div class="card-header">
-                    <h5 class="card-title">Workflow Content</h5>
-                    <ul class="nav">
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-sm btn-outline-secondary"
-                                    data-toggle="modal" data-keyboard="true" data-target="#editoroptsmodal">
-                                Options
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div>
-                        <div id="editor" class="overflow-auto"></div>
-                    </div>
-                </div>
-                <div class="card-footer"></div>
-            </div>
-        </div>
-
-        <div id="three" class="col">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Workflow Model</h5>
-                    <ul class="nav nav-tabs card-header-tabs">
-                        <li class="nav-item">
-                            <a id="rDag" class="nav-link active"class="nav-link active" data-toggle="tab" href="#wrule">Rule</a>
-                        </li>
-                        <li class="nav-item">
-                            <a id="fDag" class="nav-link" data-toggle="tab" href="#wrule">File</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab-content">
                     <div class="card-body">
-                        <button id='popOut' type="button" class="btn btn-sm btn-outline-secondary float-right">&#x21B8;</button>
-                        <div id="wrule" class="tab-pane active">
-                            <div id="graphs" style="text-align: center" class="overflow-auto">
-                                <div id="graph"></div>
+                        <div id="filetree" class="overflow-auto">
+                            <div id="wtree"></div>
+                        </div>
+                    </div>
+                    <div class="card-footer"></div>
+                </div>
+            </div>
+
+            <div id="two" class="col">
+                <div class="card bg-light ">
+                    <div class="card-header">
+                        <h5 class="card-title text-center">Workflow Content</h5>
+                        <ul class="nav">
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        data-toggle="modal" data-keyboard="true" data-target="#editoroptsmodal">
+                                    Options
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <div id="editor" class="overflow-auto"></div>
+                        </div>
+                    </div>
+                    <div class="card-footer"></div>
+                </div>
+            </div>
+
+            <div id="three" class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title text-center">Workflow Model</h5>
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                                <a id="rDag" class="nav-link active" class="nav-link active" data-toggle="tab"
+                                   href="#wrule">Rule</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="fDag" class="nav-link" data-toggle="tab" href="#wrule">File</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content">
+                        <div class="card-body">
+                            <button id='popOut' type="button" class="btn btn-sm btn-outline-secondary float-right">
+                                &#x21B8;
+                            </button>
+                            <div id="wrule" class="tab-pane active">
+                                <div id="graphs" style="text-align: center" class="overflow-auto">
+                                    <div id="graph"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="card-footer"></div>
                 </div>
-                <div class="card-footer"></div>
             </div>
         </div>
-    </div>
-    <div class="row"><hr/></div>
-    <div class="row">
-        <div id="four" class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Header</h5>
-                </div>
-                <div class="card-body">
 
-                </div>
-                <div class="card-footer">
-                    Footer
+    </div>
+
+    <div id="footer" class="mx-auto">
+        <div class="row">
+            <div class="col-12">
+                    <div class="text-center">
+                        X-Snake Navigator. 2019
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 
@@ -350,9 +349,15 @@
                         <td>
                             <div id="keyboardHandler" class="btn-group-sm" role="group" aria-label="Editor Mode">
                                 <button type="button" class="btn btn-sm btn-outline-secondary" value="">Ace</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" value="ace/keyboard/vim">Vim</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" value="ace/keyboard/emacs">Emacs</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" value="ace/keyboard/sublime">Sublime</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" value="ace/keyboard/vim">
+                                    Vim
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        value="ace/keyboard/emacs">Emacs
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        value="ace/keyboard/sublime">Sublime
+                                </button>
                             </div>
                         </td>
                     </tr>
