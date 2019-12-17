@@ -6,17 +6,14 @@ import random
 import re
 import string
 import sys
-
 import cherrypy
 import jstree
 import snakemake
-from io import StringIO
-
 import pathspec
+from io import StringIO
 
 
 class CapStdIo(list):
-
     def __enter__(self):
         self._stdout = sys.stdout
         sys.stdout = self._stringio = StringIO()
@@ -33,7 +30,6 @@ def get_random_id(size=8, chars=string.ascii_uppercase + string.digits):
     return "XS" + ''.join(random.choice(chars) for x in range(size))
 
 
-# TODO: Make sure to build this at the start and only return appropriate entries
 class XSnakeServer(object):
     exposedViewPaths = {}
 
@@ -208,7 +204,7 @@ class XSnakeServer(object):
                 for mark, line in enumerate(f.readlines()):
                     wr = wrp.match(line)
                     if wr:
-                        aResponse["content"] = mark + 1  # zero-based enumerator, editor is 1-based
+                        aResponse["content"] = mark + 1  # zero-based enumerator, editoe lines are 1-based
                         aResponse["success"] = True
                         aResponse["message"] = ""
                         break
@@ -227,7 +223,12 @@ class XSnakeServer(object):
 
     @cherrypy.expose
     def index(self):
-        return open(os.path.join("./public", 'index.html'))
+        return open(
+                os.path.join(
+                    cherrypy.request.app.config['/']['tools.staticdir.root'],
+                    cherrypy.request.app.config['/static']['tools.staticdir.dir'],
+                    cherrypy.request.app.config['/static']['tools.staticdir.index']
+                    ))
 
 
 if __name__ == '__main__':

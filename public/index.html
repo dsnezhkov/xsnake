@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title></title>
+    <title>X-Snake Navigator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -10,19 +10,17 @@
           crossorigin="anonymous">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css"/>
-    <link rel="stylesheet"
-          href="http://www.orangehilldev.com/jstree-bootstrap-theme/demo/assets/dist/themes/proton/style.css"/>
-
+    <link rel="stylesheet" href="/static/vendor/proton/style.css"/>
     <link rel="stylesheet" href="/static/css/custom.css">
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-center">
+<nav id="navbar-top" class="navbar navbar-expand-lg navbar-dark bg-dark text-center">
     <a class="navbar-brand" href="#">
-        <img src="https://1.cms.s81c.com/sites/default/files/2019-03-06/X-Force-Shield_padding.png" width="30"
+        <img src="/static/images/xfr.png" width="30"
              height="30" class="d-inline-block align-top" alt="">
-             X-Snake Navigator
+          X-Snake Navigator
     </a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -35,7 +33,7 @@
             <li class="nav-item dropdown active">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    Workflows
+                    Available Workflows
                 </a>
                 <div id="wfDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown"></div>
             </li>
@@ -59,14 +57,14 @@
                             <li class="nav-item">
                                 <div class="input-group" style="margin-bottom: 5px;">
                                     <div class="input-group-prepend">
-                                        <a href="#" id='wtreeCollapse' class="input-group-text" title="Collapse Tree">&#x21E3;</a>
+                                        <a href="#" id='wtreeCollapse' class="input-group-text" title="Collapse Tree">&#8691;</a>
                                     </div>
                                     <div class="input-group-prepend">
-                                        <a href="#" id='wtreeExpand' class="input-group-text" title="Expand Tree">&#8691;</a>
+                                        <a href="#" id='wtreeExpand' class="input-group-text" title="Expand Tree">&#x21E3;</a>
                                     </div>
                                     <input id="wtreeSrch" autocomplete="off"
                                            type="text" class="form-control"
-                                           placeholder="Lookup" aria-label="search"/>
+                                           placeholder="Lookup Asset" aria-label="search"/>
                                     <div class="input-group-append">
                                         <span class="input-group-text">&#x1F50D;</span>
                                     </div>
@@ -111,7 +109,7 @@
                         <h5 class="card-title text-center">Workflow Model</h5>
                         <ul class="nav nav-tabs card-header-tabs">
                             <li class="nav-item">
-                                <a id="rDag" class="nav-link active" class="nav-link active" data-toggle="tab"
+                                <a id="rDag"  class="nav-link active" data-toggle="tab"
                                    href="#wrule">Rule</a>
                             </li>
                             <li class="nav-item">
@@ -134,20 +132,18 @@
                     <div class="card-footer"></div>
                 </div>
             </div>
+
         </div>
-
-    </div>
-
-    <div id="footer" class="mx-auto">
         <div class="row">
-            <div class="col-12">
-                    <div class="text-center">
-                        X-Snake Navigator. 2019
-                    </div>
-                </div>
-            </div>
         </div>
+
     </div>
+
+    <nav id="navbar-bottom" class="navbar fixed-bottom navbar-light bg-dark ">
+        <div class="text-center text-light">
+            Built with &#10084; @ XForce Red
+        </div>
+    </nav>
 
 </div>
 
@@ -348,9 +344,8 @@
                         <td><label for="keyboardHandler">Keybinding</label></td>
                         <td>
                             <div id="keyboardHandler" class="btn-group-sm" role="group" aria-label="Editor Mode">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" value="">Ace</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" value="ace/keyboard/vim">
-                                    Vim
+                                <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        value="ace/keyboard/vim">Vim
                                 </button>
                                 <button type="button" class="btn btn-sm btn-outline-secondary"
                                         value="ace/keyboard/emacs">Emacs
@@ -371,32 +366,21 @@
 </div>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script
-        src="https://code.jquery.com/jquery-3.4.1.min.js"
-        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         crossorigin="anonymous"></script>
 
-
 <script src="//d3js.org/d3.v4.min.js"></script>
 <script src="https://unpkg.com/viz.js@1.8.1/viz.js" type="javascript/worker"></script>
 <script src="https://unpkg.com/d3-graphviz@2.6.1/build/d3-graphviz.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
 <script src="/static/js/ace-builds/src/ace.js" type="text/javascript" charset="utf-8"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.3.5/split.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.16.0/js/canvas-to-blob.js"
-        integrity="sha256-SUJhN0pToC7HVMAVypbOQ0+I2z5SO1JIRIZ8qGL8nZo=" crossorigin="anonymous"></script>
-
-<script src="http://cdn.jsdelivr.net/g/filesaver.js"></script>
 
 <script src="/static/js/custom.js"></script>
 </body>

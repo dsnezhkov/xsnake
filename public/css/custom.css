@@ -3,9 +3,10 @@
 #graphs {height: 500px;}
 #wtreeCollapse, #wtreeExpand {text-decoration: none;}
 
-.navbar {border-bottom:1px solid red;}
+#navbar-top {border-bottom:2px solid #BB313B;}
+#navbar-bottom {border-top:2px solid #BB313B;}
 .nav-tabs .nav-item .nav-link {text-decoration: none;color: rgba(0,0,0,.9);}
-.nav-tabs .nav-link.active {border-top:1px solid red;}
+.nav-tabs .nav-link.active {border-top:1px solid #BB313B;}
 
 /* Split.js */
 .split {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;overflow-y: auto;overflow-x: hidden;}
