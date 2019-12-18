@@ -6,6 +6,7 @@ import random
 import re
 import string
 import sys
+from io import StringIO
 
 import cherrypy
 from cherrypy.process.plugins import Daemonizer, PIDFile
@@ -13,7 +14,6 @@ from cherrypy.process.plugins import Daemonizer, PIDFile
 import jstree
 import snakemake
 import pathspec
-from io import StringIO
 
 
 class CapStdIo(list):
@@ -29,8 +29,7 @@ class CapStdIo(list):
 
 
 def get_random_id(size=8, chars=string.ascii_uppercase + string.digits):
-    # TODO: paramterize
-    return "XS" + ''.join(random.choice(chars) for x in range(size))
+    return "XS" + ''.join(random.choice(chars) for _ in range(size))
 
 
 class XSnakeServer(object):
@@ -151,17 +150,20 @@ class XSnakeServer(object):
                     cherrypy.request.app.config['XSnake']['workflows.top_dir'],
                     str(XSnakeServer.exposedViewPaths[wf][rid].path))) as f:
                 cherrypy.log(f.name)
+
                 eResponse["content"] = f.read()
                 eResponse["success"] = True
                 eResponse["message"] = ""
-        except IOError as x:
+        except (UnicodeDecodeError, AttributeError) as x:
+            eResponse["message"] = "Error: {}. Are you trying to view a binary file?".format(x)
+        except (IOError, Exception) as x:
             cherrypy.log("Workflow Resource Error:", traceback=True)
             if x.errno == errno.ENOENT:
                 eResponse["message"] = "File does not exist" + str(XSnakeServer.exposedViewPaths[wf][rid].path)
             elif x.errno == errno.EACCES:
                 eResponse["message"] = "File cannot be read"
             else:
-                eResponse["message"] = "Unknown error when accessing File"
+                eResponse["message"] = "Unknown error when accessing File: {}".format(x)
 
         return json.dumps(eResponse)
 
@@ -221,7 +223,8 @@ class XSnakeServer(object):
                 for mark, line in enumerate(f.readlines()):
                     wr = wrp.match(line)
                     if wr:
-                        aResponse["content"] = mark + 1  # zero-based enumerator, editoe lines are 1-based
+                        aResponse["content"] = mark + 1  # zero-based enumerator,
+                                                         # editor lines are 1-based
                         aResponse["success"] = True
                         aResponse["message"] = ""
                         break
@@ -262,4 +265,3 @@ if __name__ == '__main__':
 
     cherrypy.engine.start()
     cherrypy.engine.block()
-
