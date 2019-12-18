@@ -1,4 +1,5 @@
 .idea/
-logs/**
-run/**
+logs/access
+logs/error
+run/xsnake.pid
 docs/work/
