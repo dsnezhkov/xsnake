@@ -251,9 +251,11 @@ class XSnakeServer(object):
 
 if __name__ == '__main__':
     cherrypy.config.update((os.path.join(os.curdir, "server.conf")))
+
     app = XSnakeServer()
-    PIDFile(cherrypy.engine, 'run/xsnaked.pid').subscribe()
+
     Daemonizer(cherrypy.engine).subscribe()
+    PIDFile(cherrypy.engine, 'run/xsnaked.pid').subscribe()
 
     cherrypy.tree.mount(app, '/', config=os.path.join(
         os.curdir, "apps", "navigator.conf"))
