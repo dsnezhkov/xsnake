@@ -1,0 +1,162 @@
+[17/Dec/2019:18:15:05] ENGINE Bus STARTING
+[17/Dec/2019:18:15:05] ENGINE Started monitor thread 'Autoreloader'.
+[17/Dec/2019:18:15:05] ENGINE Serving on https://127.0.0.1:8443
+[17/Dec/2019:18:15:05] ENGINE Bus STARTED
+[17/Dec/2019:18:15:11] ENGINE Restarting because ./server.conf changed.
+[17/Dec/2019:18:15:11] ENGINE Stopped thread 'Autoreloader'.
+[17/Dec/2019:18:15:11] ENGINE Bus STOPPING
+[17/Dec/2019:18:15:16] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('127.0.0.1', 8443)) shut down
+[17/Dec/2019:18:15:16] ENGINE Bus STOPPED
+[17/Dec/2019:18:15:16] ENGINE Bus EXITING
+[17/Dec/2019:18:15:16] ENGINE Bus EXITED
+[17/Dec/2019:18:15:16] ENGINE Waiting for child threads to terminate...
+[17/Dec/2019:18:15:16] ENGINE Re-spawning /usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/Resources/Python.app/Contents/MacOS/Python xsnaked.py
+[17/Dec/2019:18:15:17] ENGINE Bus STARTING
+[17/Dec/2019:18:15:17] ENGINE Started monitor thread 'Autoreloader'.
+[17/Dec/2019:18:15:17] ENGINE Serving on https://127.0.0.1:8443
+[17/Dec/2019:18:15:17] ENGINE Bus STARTED
+[17/Dec/2019:18:15:38] HTTP 
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/cherrypy/_cprequest.py", line 638, in respond
+    self._do_respond(path_info)
+  File "/usr/local/lib/python3.7/site-packages/cherrypy/_cprequest.py", line 697, in _do_respond
+    response.body = self.handler()
+  File "/usr/local/lib/python3.7/site-packages/cherrypy/lib/encoding.py", line 219, in __call__
+    self.body = self.oldhandler(*args, **kwargs)
+  File "/usr/local/lib/python3.7/site-packages/cherrypy/lib/jsontools.py", line 59, in json_handler
+    value = cherrypy.serving.request._json_inner_handler(*args, **kwargs)
+  File "/usr/local/lib/python3.7/site-packages/cherrypy/_cpdispatch.py", line 54, in __call__
+    return self.callable(*self.args, **self.kwargs)
+  File "xsnaked.py", line 142, in econtent
+    if rid not in XSnakeServer.exposedViewPaths[wf].keys():
+KeyError: 'Workflow1'
+[17/Dec/2019:18:15:38] HTTP 
+Request Headers:
+  Remote-Addr: 127.0.0.1
+  HOST: 127.0.0.1:8443
+  CONNECTION: keep-alive
+  ACCEPT: application/json, text/plain, */*
+  USER-AGENT: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36
+  SEC-FETCH-SITE: same-origin
+  SEC-FETCH-MODE: cors
+  REFERER: https://127.0.0.1:8443/
+  ACCEPT-ENCODING: gzip, deflate, br
+  ACCEPT-LANGUAGE: en-US,en;q=0.9
+  COOKIE: workflow=Workflow1; session_id=7a7c71847817f5ab50b910896bf34307b360d105
+[17/Dec/2019:18:16:38]  /Users/dimas/Code/xsnake/workflows/Workflow1/cdata/server-name-wordlist-mnemonic.txt.orig
+[17/Dec/2019:18:16:40]  /Users/dimas/Code/xsnake/workflows/Workflow1/data/dnsmap.domain
+[17/Dec/2019:18:16:42]  /Users/dimas/Code/xsnake/workflows/Workflow1/helpers/fetch_wordlist.sh
+[17/Dec/2019:18:16:45]  /Users/dimas/Code/xsnake/workflows/Workflow1/data/dnsmap.domain
+[17/Dec/2019:18:16:46]  /Users/dimas/Code/xsnake/workflows/Workflow1/main.snake
+[17/Dec/2019:18:16:50]  /Users/dimas/Code/xsnake/workflows/Workflow2/data/domain_name.in
+[17/Dec/2019:18:16:51]  /Users/dimas/Code/xsnake/workflows/Workflow2/main.snake
+[17/Dec/2019:18:22:15] ENGINE Restarting because /Users/dimas/PycharmProjects/xsnake/xsnaked.py changed.
+[17/Dec/2019:18:22:15] ENGINE Stopped thread 'Autoreloader'.
+[17/Dec/2019:18:22:15] ENGINE Bus STOPPING
+[17/Dec/2019:18:22:15] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('127.0.0.1', 8443)) shut down
+[17/Dec/2019:18:22:15] ENGINE Bus STOPPED
+[17/Dec/2019:18:22:15] ENGINE Bus EXITING
+[17/Dec/2019:18:22:15] ENGINE Bus EXITED
+[17/Dec/2019:18:22:15] ENGINE Waiting for child threads to terminate...
+[17/Dec/2019:18:22:15] ENGINE Re-spawning /usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/Resources/Python.app/Contents/MacOS/Python xsnaked.py
+[17/Dec/2019:18:22:16] ENGINE Bus STARTING
+[17/Dec/2019:18:22:16] ENGINE Started monitor thread 'Autoreloader'.
+[17/Dec/2019:18:22:16] ENGINE Serving on https://127.0.0.1:8443
+[17/Dec/2019:18:22:16] ENGINE Bus STARTED
+[17/Dec/2019:18:22:21] ENGINE Restarting because /Users/dimas/PycharmProjects/xsnake/xsnaked.py changed.
+[17/Dec/2019:18:22:21] ENGINE Stopped thread 'Autoreloader'.
+[17/Dec/2019:18:22:21] ENGINE Bus STOPPING
+[17/Dec/2019:18:22:21] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('127.0.0.1', 8443)) shut down
+[17/Dec/2019:18:22:21] ENGINE Bus STOPPED
+[17/Dec/2019:18:22:21] ENGINE Bus EXITING
+[17/Dec/2019:18:22:21] ENGINE Bus EXITED
+[17/Dec/2019:18:22:21] ENGINE Waiting for child threads to terminate...
+[17/Dec/2019:18:22:21] ENGINE Re-spawning /usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/Resources/Python.app/Contents/MacOS/Python xsnaked.py
+[17/Dec/2019:18:22:22] ENGINE Bus STARTING
+[17/Dec/2019:18:22:22] ENGINE Started monitor thread 'Autoreloader'.
+[17/Dec/2019:18:22:22] ENGINE Serving on https://127.0.0.1:8443
+[17/Dec/2019:18:22:22] ENGINE Bus STARTED
+[17/Dec/2019:18:22:24] ENGINE Keyboard Interrupt: shutting down bus
+[17/Dec/2019:18:22:24] ENGINE Bus STOPPING
+[17/Dec/2019:18:22:24] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('127.0.0.1', 8443)) shut down
+[17/Dec/2019:18:22:24] ENGINE Stopped thread 'Autoreloader'.
+[17/Dec/2019:18:22:24] ENGINE Bus STOPPED
+[17/Dec/2019:18:22:24] ENGINE Bus EXITING
+[17/Dec/2019:18:22:24] ENGINE Bus EXITED
+[17/Dec/2019:18:22:24] ENGINE Waiting for child threads to terminate...
+[17/Dec/2019:18:22:26] ENGINE Bus STARTING
+[17/Dec/2019:18:22:26] ENGINE Started monitor thread 'Autoreloader'.
+[17/Dec/2019:18:22:27] ENGINE Serving on https://127.0.0.1:8443
+[17/Dec/2019:18:22:27] ENGINE Bus STARTED
+[17/Dec/2019:18:22:28] ENGINE Keyboard Interrupt: shutting down bus
+[17/Dec/2019:18:22:28] ENGINE Bus STOPPING
+[17/Dec/2019:18:22:28] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('127.0.0.1', 8443)) shut down
+[17/Dec/2019:18:22:28] ENGINE Stopped thread 'Autoreloader'.
+[17/Dec/2019:18:22:28] ENGINE Bus STOPPED
+[17/Dec/2019:18:22:28] ENGINE Bus EXITING
+[17/Dec/2019:18:22:28] ENGINE Bus EXITED
+[17/Dec/2019:18:22:28] ENGINE Waiting for child threads to terminate...
+[17/Dec/2019:18:23:29] ENGINE Bus STARTING
+[17/Dec/2019:18:23:29] ENGINE Started monitor thread 'Autoreloader'.
+[17/Dec/2019:18:23:29] ENGINE Serving on https://127.0.0.1:8443
+[17/Dec/2019:18:23:29] ENGINE Bus STARTED
+[17/Dec/2019:18:23:31] ENGINE Keyboard Interrupt: shutting down bus
+[17/Dec/2019:18:23:32] ENGINE Bus STOPPING
+[17/Dec/2019:18:23:32] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('127.0.0.1', 8443)) shut down
+[17/Dec/2019:18:23:32] ENGINE Stopped thread 'Autoreloader'.
+[17/Dec/2019:18:23:32] ENGINE Bus STOPPED
+[17/Dec/2019:18:23:32] ENGINE Bus EXITING
+[17/Dec/2019:18:23:32] ENGINE Bus EXITED
+[17/Dec/2019:18:23:32] ENGINE Waiting for child threads to terminate...
+[17/Dec/2019:18:24:49] ENGINE Bus STARTING
+[17/Dec/2019:18:24:49] ENGINE Forking once.
+[17/Dec/2019:18:24:49] ENGINE Forking twice.
+[17/Dec/2019:18:24:49] ENGINE Daemonized to PID: 4942
+[17/Dec/2019:18:24:49] ENGINE Started monitor thread 'Autoreloader'.
+[17/Dec/2019:18:24:49] ENGINE Serving on https://127.0.0.1:8443
+[17/Dec/2019:18:24:49] ENGINE Bus STARTED
+[17/Dec/2019:18:27:24] ENGINE Restarting because /Users/dimas/PycharmProjects/xsnake/xsnaked.py changed.
+[17/Dec/2019:18:27:24] ENGINE Stopped thread 'Autoreloader'.
+[17/Dec/2019:18:27:24] ENGINE Bus STOPPING
+[17/Dec/2019:18:27:24] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('127.0.0.1', 8443)) shut down
+[17/Dec/2019:18:27:24] ENGINE Bus STOPPED
+[17/Dec/2019:18:27:24] ENGINE Bus EXITING
+[17/Dec/2019:18:27:24] ENGINE Bus EXITED
+[17/Dec/2019:18:27:24] ENGINE Waiting for child threads to terminate...
+[17/Dec/2019:18:27:24] ENGINE Re-spawning /usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/Resources/Python.app/Contents/MacOS/Python xsnaked.py
+[17/Dec/2019:18:27:24] ENGINE Bus STARTING
+[17/Dec/2019:18:27:24] ENGINE Forking once.
+[17/Dec/2019:18:27:24] ENGINE Forking twice.
+[17/Dec/2019:18:27:24] ENGINE Daemonized to PID: 5179
+[17/Dec/2019:18:27:24] ENGINE Started monitor thread 'Autoreloader'.
+[17/Dec/2019:18:27:24] ENGINE Error in 'start' listener <bound method PIDFile.start of <cherrypy.process.plugins.PIDFile object at 0x10c972690>>
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/cherrypy/process/wspbus.py", line 230, in publish
+    output.append(listener(*args, **kwargs))
+  File "/usr/local/lib/python3.7/site-packages/cherrypy/process/plugins.py", line 439, in start
+    open(self.pidfile, 'wb').write(ntob('%s\n' % pid, 'utf8'))
+PermissionError: [Errno 13] Permission denied: '/var/run/myapp.pid'
+
+[17/Dec/2019:18:27:24] ENGINE Serving on https://127.0.0.1:8443
+[17/Dec/2019:18:27:24] ENGINE Shutting down due to error in start listener:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/cherrypy/process/wspbus.py", line 268, in start
+    self.publish('start')
+  File "/usr/local/lib/python3.7/site-packages/cherrypy/process/wspbus.py", line 248, in publish
+    raise exc
+cherrypy.process.wspbus.ChannelFailures: PermissionError(13, 'Permission denied')
+
+[17/Dec/2019:18:27:24] ENGINE Bus STOPPING
+[17/Dec/2019:18:27:24] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('127.0.0.1', 8443)) shut down
+[17/Dec/2019:18:27:24] ENGINE Stopped thread 'Autoreloader'.
+[17/Dec/2019:18:27:24] ENGINE Bus STOPPED
+[17/Dec/2019:18:27:24] ENGINE Bus EXITING
+[17/Dec/2019:18:27:24] ENGINE Bus EXITED
+[17/Dec/2019:18:28:10] ENGINE Bus STARTING
+[17/Dec/2019:18:28:10] ENGINE Forking once.
+[17/Dec/2019:18:28:10] ENGINE Forking twice.
+[17/Dec/2019:18:28:10] ENGINE Daemonized to PID: 5267
+[17/Dec/2019:18:28:10] ENGINE Started monitor thread 'Autoreloader'.
+[17/Dec/2019:18:28:10] ENGINE PID 5267 written to 'run/xsnaked.pid'.
+[17/Dec/2019:18:28:10] ENGINE Serving on https://127.0.0.1:8443
+[17/Dec/2019:18:28:10] ENGINE Bus STARTED

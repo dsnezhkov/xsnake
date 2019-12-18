@@ -1,0 +1,37 @@
+### BEGIN ###
+
+from snakemake.utils import min_version
+min_version("5.7.4")
+
+include: "includes/help/Workflow.man"
+
+rule all:
+	"""Phony: Runs all tasks
+   	Type: Task (Phony)
+    Parameters:
+		The last output file that starts the recursive chain of tasks
+
+    Returns:
+		None
+	"""
+	input:
+		"data/one.out"
+
+rule one:
+    """Runs [...]
+
+    Type: <Task|Glue>
+    Parameters:
+    Returns:
+    Notes: 
+
+    """
+    message: "[Task] Runs [...]"
+    log: "logs/one.log"
+    input:
+        "data/one.in"
+    output:
+        "data/one.out"
+    run:
+        shell("cat {input} > {output} ")
+### END ###
