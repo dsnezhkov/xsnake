@@ -1,0 +1,169 @@
+[20/Jan/2020:11:16:32] ENGINE Bus STARTING
+[20/Jan/2020:11:16:32] ENGINE Forking once.
+[20/Jan/2020:11:16:32] ENGINE Forking twice.
+[20/Jan/2020:11:16:32] ENGINE Daemonized to PID: 50905
+[20/Jan/2020:11:16:32] ENGINE PID 50905 written to 'run/xsnaked.pid'.
+[20/Jan/2020:11:16:32] ENGINE Started monitor thread 'Autoreloader'.
+[20/Jan/2020:11:16:32] ENGINE Serving on https://127.0.0.1:8443
+[20/Jan/2020:11:16:32] ENGINE Bus STARTED
+[20/Jan/2020:11:19:46] ENGINE Bus STARTING
+[20/Jan/2020:11:19:46] ENGINE Forking once.
+[20/Jan/2020:11:19:46] ENGINE Forking twice.
+[20/Jan/2020:11:19:46] ENGINE Daemonized to PID: 51186
+[20/Jan/2020:11:19:46] ENGINE PID 51186 written to 'run/xsnaked.pid'.
+[20/Jan/2020:11:19:46] ENGINE Started monitor thread 'Autoreloader'.
+[20/Jan/2020:11:19:46] ENGINE Serving on https://127.0.0.1:8443
+[20/Jan/2020:11:19:46] ENGINE Bus STARTED
+[20/Jan/2020:11:22:00] ENGINE Bus STARTING
+[20/Jan/2020:11:22:00] ENGINE Forking once.
+[20/Jan/2020:11:22:00] ENGINE Forking twice.
+[20/Jan/2020:11:22:00] ENGINE Daemonized to PID: 51410
+[20/Jan/2020:11:22:00] ENGINE PID 51410 written to 'run/xsnaked.pid'.
+[20/Jan/2020:11:22:00] ENGINE Started monitor thread 'Autoreloader'.
+[20/Jan/2020:11:22:00] ENGINE Serving on https://127.0.0.1:8443
+[20/Jan/2020:11:22:00] ENGINE Bus STARTED
+[20/Jan/2020:11:31:04]  /Users/dimas/Code/xsnake-workflows/workflows/Workflow1/main.snake
+[20/Jan/2020:11:31:11]  /Users/dimas/Code/xsnake-workflows/workflows/Workflow2/main.snake
+[20/Jan/2020:11:34:17]  /Users/dimas/Code/xsnake-workflows/workflows/Workflow2/main.snake
+[20/Jan/2020:16:57:20]  /Users/dimas/Code/xsnake-workflows/workflows/Workflow2/data/domain_name.in
+[20/Jan/2020:16:57:23]  /Users/dimas/Code/xsnake-workflows/workflows/Workflow2/main.snake
+[20/Jan/2020:17:00:36]  /Users/dimas/Code/xsnake-workflows/workflows/Workflow1/scripts/nmap_tbl.py
+[20/Jan/2020:17:00:51]  /Users/dimas/Code/xsnake-workflows/workflows/Workflow1/main.snake
+[20/Jan/2020:18:40:26]  /Users/dimas/Code/xsnake-workflows/workflows/Workflow1/scripts/nmap_tbl.py
+[20/Jan/2020:18:40:35]  /Users/dimas/Code/xsnake-workflows/workflows/Workflow1/main.snake
+[23/Jan/2020:09:34:34] ENGINE Bus STARTING
+[23/Jan/2020:09:34:34] ENGINE Forking once.
+[23/Jan/2020:09:34:34] ENGINE Forking twice.
+[23/Jan/2020:09:34:34] ENGINE Daemonized to PID: 23226
+[23/Jan/2020:09:34:34] ENGINE Started monitor thread 'Autoreloader'.
+[23/Jan/2020:09:34:34] ENGINE PID 23226 written to 'run/xsnaked.pid'.
+[23/Jan/2020:09:34:36] ENGINE Error in 'start' listener <bound method Server.start of <cherrypy._cpserver.Server object at 0x110815790>>
+Traceback (most recent call last):
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/portend.py", line 115, in free
+    Checker(timeout=0.1).assert_free(host, port)
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/portend.py", line 69, in assert_free
+    list(itertools.starmap(self._connect, info))
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/portend.py", line 85, in _connect
+    raise PortNotFree(tmpl.format(**locals()))
+portend.PortNotFree: Port 127.0.0.1 is in use on 8443.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/process/wspbus.py", line 230, in publish
+    output.append(listener(*args, **kwargs))
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/_cpserver.py", line 180, in start
+    super(Server, self).start()
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/process/servers.py", line 177, in start
+    portend.free(*self.bind_addr, timeout=Timeouts.free)
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/portend.py", line 119, in free
+    raise Timeout("Port {port} not free on {host}.".format(**locals()))
+portend.Timeout: Port 8443 not free on 127.0.0.1.
+
+[23/Jan/2020:09:34:36] ENGINE Shutting down due to error in start listener:
+Traceback (most recent call last):
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/process/wspbus.py", line 268, in start
+    self.publish('start')
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/process/wspbus.py", line 248, in publish
+    raise exc
+cherrypy.process.wspbus.ChannelFailures: Timeout('Port 8443 not free on 127.0.0.1.')
+
+[23/Jan/2020:09:34:36] ENGINE Bus STOPPING
+[23/Jan/2020:09:34:36] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('127.0.0.1', 8443)) already shut down
+[23/Jan/2020:09:34:36] ENGINE Stopped thread 'Autoreloader'.
+[23/Jan/2020:09:34:36] ENGINE Bus STOPPED
+[23/Jan/2020:09:34:36] ENGINE Bus EXITING
+[23/Jan/2020:09:34:36] ENGINE PID file removed: 'run/xsnaked.pid'.
+[23/Jan/2020:09:34:36] ENGINE Bus EXITED
+[23/Jan/2020:09:39:40] ENGINE Bus STARTING
+[23/Jan/2020:09:39:40] ENGINE Forking once.
+[23/Jan/2020:09:39:40] ENGINE Forking twice.
+[23/Jan/2020:09:39:40] ENGINE Daemonized to PID: 23711
+[23/Jan/2020:09:39:40] ENGINE PID 23711 written to 'run/xsnaked.pid'.
+[23/Jan/2020:09:39:40] ENGINE Started monitor thread 'Autoreloader'.
+[23/Jan/2020:09:39:41] ENGINE Serving on https://127.0.0.1:8443
+[23/Jan/2020:09:39:41] ENGINE Bus STARTED
+[23/Jan/2020:09:46:04] ENGINE Bus STARTING
+[23/Jan/2020:09:46:04] ENGINE Forking once.
+[23/Jan/2020:09:46:04] ENGINE Forking twice.
+[23/Jan/2020:09:46:04] ENGINE Daemonized to PID: 24291
+[23/Jan/2020:09:46:04] ENGINE Started monitor thread 'Autoreloader'.
+[23/Jan/2020:09:46:04] ENGINE PID 24291 written to 'run/xsnaked.pid'.
+[23/Jan/2020:09:46:04] ENGINE Serving on https://127.0.0.1:8443
+[23/Jan/2020:09:46:04] ENGINE Bus STARTED
+[23/Jan/2020:09:46:26] ENGINE Restarting because ./server.conf changed.
+[23/Jan/2020:09:46:26] ENGINE Stopped thread 'Autoreloader'.
+[23/Jan/2020:09:46:26] ENGINE Bus STOPPING
+[23/Jan/2020:09:46:26] ENGINE HTTP Server cherrypy._cpwsgi_server.CPWSGIServer(('127.0.0.1', 8443)) shut down
+[23/Jan/2020:09:46:26] ENGINE Bus STOPPED
+[23/Jan/2020:09:46:26] ENGINE Bus EXITING
+[23/Jan/2020:09:46:26] ENGINE PID file removed: 'run/xsnaked.pid'.
+[23/Jan/2020:09:46:26] ENGINE Waiting for child threads to terminate...
+[23/Jan/2020:09:46:26] ENGINE Bus EXITED
+[23/Jan/2020:09:46:26] ENGINE Re-spawning /usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/Resources/Python.app/Contents/MacOS/Python xsnaked.py
+[23/Jan/2020:09:46:27] ENGINE Bus STARTING
+[23/Jan/2020:09:46:27] ENGINE Forking once.
+[23/Jan/2020:09:46:27] ENGINE Forking twice.
+[23/Jan/2020:09:46:27] ENGINE Daemonized to PID: 24342
+[23/Jan/2020:09:46:27] ENGINE PID 24342 written to 'run/xsnaked.pid'.
+[23/Jan/2020:09:46:27] ENGINE Started monitor thread 'Autoreloader'.
+[23/Jan/2020:09:46:28] ENGINE Serving on https://127.0.0.1:8443
+[23/Jan/2020:09:46:28] ENGINE Bus STARTED
+[23/Jan/2020:09:46:38] HTTP 
+Traceback (most recent call last):
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/_cprequest.py", line 638, in respond
+    self._do_respond(path_info)
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/_cprequest.py", line 697, in _do_respond
+    response.body = self.handler()
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/lib/encoding.py", line 219, in __call__
+    self.body = self.oldhandler(*args, **kwargs)
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/lib/jsontools.py", line 59, in json_handler
+    value = cherrypy.serving.request._json_inner_handler(*args, **kwargs)
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/_cpdispatch.py", line 54, in __call__
+    return self.callable(*self.args, **self.kwargs)
+  File "xsnaked.py", line 100, in wtree
+    t = jstree.JSTree(XSnakeServer.exposedViewPaths[wf].values())
+KeyError: 'Workflow2'
+[23/Jan/2020:09:46:38] HTTP 
+Request Headers:
+  Remote-Addr: 127.0.0.1
+  HOST: 127.0.0.1:8443
+  CONNECTION: keep-alive
+  ACCEPT: application/json, text/javascript, */*; q=0.01
+  X-REQUESTED-WITH: XMLHttpRequest
+  USER-AGENT: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36
+  SEC-FETCH-SITE: same-origin
+  SEC-FETCH-MODE: cors
+  REFERER: https://127.0.0.1:8443/
+  ACCEPT-ENCODING: gzip, deflate, br
+  ACCEPT-LANGUAGE: en-US,en;q=0.9
+  COOKIE: session_id=ce80df88b4b659e2d20d3dade373a4abce39ec8b; workflow=Workflow2
+[23/Jan/2020:09:46:45] HTTP 
+Traceback (most recent call last):
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/_cprequest.py", line 638, in respond
+    self._do_respond(path_info)
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/_cprequest.py", line 697, in _do_respond
+    response.body = self.handler()
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/lib/encoding.py", line 219, in __call__
+    self.body = self.oldhandler(*args, **kwargs)
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/lib/jsontools.py", line 59, in json_handler
+    value = cherrypy.serving.request._json_inner_handler(*args, **kwargs)
+  File "/Users/dimas/PycharmProjects/xsnake/venv/lib/python3.7/site-packages/cherrypy/_cpdispatch.py", line 54, in __call__
+    return self.callable(*self.args, **self.kwargs)
+  File "xsnaked.py", line 100, in wtree
+    t = jstree.JSTree(XSnakeServer.exposedViewPaths[wf].values())
+KeyError: 'Workflow1'
+[23/Jan/2020:09:46:45] HTTP 
+Request Headers:
+  Remote-Addr: 127.0.0.1
+  HOST: 127.0.0.1:8443
+  CONNECTION: keep-alive
+  ACCEPT: application/json, text/javascript, */*; q=0.01
+  X-REQUESTED-WITH: XMLHttpRequest
+  USER-AGENT: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36
+  SEC-FETCH-SITE: same-origin
+  SEC-FETCH-MODE: cors
+  REFERER: https://127.0.0.1:8443/
+  ACCEPT-ENCODING: gzip, deflate, br
+  ACCEPT-LANGUAGE: en-US,en;q=0.9
+  COOKIE: session_id=9c0f1e9bc5be9c1d4b9aab9a2f468fb3496bc550; workflow=Workflow1

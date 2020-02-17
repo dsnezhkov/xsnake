@@ -57,6 +57,7 @@ class XSnakeServer(object):
                 # TODO: check for dir
                 wftdir = cherrypy.request.app.config['XSnake']['workflows.top_dir']
                 if os.path.exists(wftdir):
+                    print(wftdir)
                     os.chdir(wftdir)
                 else:
                     eResponse['success'] = False
@@ -82,7 +83,7 @@ class XSnakeServer(object):
                         eResponse['content'] = "IO error: {0}".format(err)
                         cherrypy.log("Specfile Error:", traceback=True)
 
-                    # [print(v) for v in XSnakeServer.exposedViewPaths[wf].values()]
+                    [print(v) for v in XSnakeServer.exposedViewPaths[wf].values()]
                     eResponse['success'] = True
                     eResponse['content'] = list(XSnakeServer.exposedViewPaths.keys())
                 else:
